@@ -1,0 +1,28 @@
+﻿using System;
+
+public class A
+{
+    public void |M1|(0)()
+    {
+        for (var i = 0; i < 100; i++) // +1
+        {
+            for (var j = 0; j < 100; j++) // +2
+            {
+            }
+        }
+    }
+    
+    public void |M2|(1)()
+    {
+        for (var i = 0; i < 100; i++) // +1
+        {
+        }
+        for (var j = 0; j < 100; j++) // +1
+        {
+        }
+    }
+}
+
+---------------------------------------------------------
+(0): ReSharper Warning: (T) '3' (E) 'M1'
+(1): ReSharper Warning: (T) '2' (E) 'M2'

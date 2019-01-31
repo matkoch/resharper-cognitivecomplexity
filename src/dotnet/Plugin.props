@@ -1,0 +1,17 @@
+<Project>
+  <PropertyGroup>
+    <SdkVersion>2018.3.0-*</SdkVersion>
+    
+    <Title>CognitiveComplexity</Title>
+    <Description>This plugin implements live calculation of the Cognitive Complexity metric, which was proposed by G. Ann Campbell in Cognitive Complexity - A new way of measuring understandability (c) SonarSource S.A. 2016-2018, Switzerland.
+    </Description>
+  
+    <Authors>Matthias Koch</Authors>
+    <Copyright>Copyright $([System.DateTime]::Now.Year) Matthias Koch</Copyright>
+    <PackageTags>resharper plugin cognitive  complexity  metric</PackageTags>
+  
+    <PackageProjectUrl>https://github.com/matkoch/resharper-cognitivecomplexity</PackageProjectUrl>
+    <PackageLicenseUrl></PackageLicenseUrl>
+    <PackageIconUrl></PackageIconUrl>
+  </PropertyGroup>
+</Project>

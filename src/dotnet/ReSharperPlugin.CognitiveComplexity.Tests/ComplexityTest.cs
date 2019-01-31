@@ -1,0 +1,31 @@
+﻿using JetBrains.Application.Settings;
+using JetBrains.ReSharper.Daemon.CodeInsights;
+using JetBrains.ReSharper.Feature.Services.Daemon;
+using JetBrains.ReSharper.FeaturesTestFramework.Daemon;
+using JetBrains.ReSharper.Psi;
+using JetBrains.ReSharper.TestFramework;
+using NUnit.Framework;
+
+namespace ReSharperPlugin.CognitiveComplexity.Tests
+{
+    public class ComplexityTest : CSharpHighlightingTestBase
+    {
+        protected override string RelativeTestDataPath => "CSharp";
+
+        protected override bool HighlightingPredicate(
+            IHighlighting highlighting,
+            IPsiSourceFile sourceFile,
+            IContextBoundSettingsStore settingsStore)
+        {
+            return highlighting is WarningHighlighting;
+        }
+
+        [Test] public void TestNullCheckingTest() { DoNamedTest2(); }
+        [Test] public void TestNestingTest() { DoNamedTest2(); }
+        [Test] public void TestLogicalOperatorTest() { DoNamedTest2(); }
+        [Test] public void TestSwitchTest() { DoNamedTest2(); }
+        [Test] public void TestRecursiveTest() { DoNamedTest2(); }
+        [Test] public void TestTryCatchTest() { DoNamedTest2(); }
+        [Test] public void TestLambdaTest() { DoNamedTest2(); }
+    }
+}

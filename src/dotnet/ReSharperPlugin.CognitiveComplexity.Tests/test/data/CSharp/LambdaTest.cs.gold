@@ -1,0 +1,27 @@
+﻿using System;
+using System.Threading.Tasks;
+
+public class A
+{
+    public void |M1|(0)(bool b)
+    {
+        var task = Task.Run(() =>
+        {
+            if (b) // +2
+                Console.WriteLine();
+        });
+    }
+    
+    public void |M2|(1)(bool b)
+    {
+        var task = Task.Run(delegate
+        {
+            if (b) // +2
+                Console.WriteLine();
+        });
+    }
+}
+
+---------------------------------------------------------
+(0): ReSharper Warning: (T) '2' (E) 'M1'
+(1): ReSharper Warning: (T) '2' (E) 'M2'

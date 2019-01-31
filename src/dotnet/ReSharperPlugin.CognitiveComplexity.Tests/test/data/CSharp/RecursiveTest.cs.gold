@@ -1,0 +1,29 @@
+﻿using System;
+
+public class A
+{
+    public void |M1|(0)()
+    {
+        M1(); // +1
+    }
+
+    public bool |M2|(1)(bool a)
+    {
+        if (a && M2(a)) // +3 (if, and, recursive)
+        {
+            return true;
+        }
+        
+        return false;
+    }
+
+    public bool |M3|(2)(bool a)
+    {
+        return a && !M3(a); // +2
+    }
+}
+
+---------------------------------------------------------
+(0): ReSharper Warning: (T) '1' (E) 'M1'
+(1): ReSharper Warning: (T) '3' (E) 'M2'
+(2): ReSharper Warning: (T) '2' (E) 'M3'

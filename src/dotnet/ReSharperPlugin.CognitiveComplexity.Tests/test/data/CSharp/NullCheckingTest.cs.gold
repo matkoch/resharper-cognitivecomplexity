@@ -1,0 +1,20 @@
+﻿using System;
+
+public class A
+{
+    public void |M1|(0)(object obj)
+    {
+        string str = null;
+        if (obj != null) // +1
+            str = obj.ToString();
+    }
+
+    public void |M2|(1)(object obj)
+    {
+        var str = obj?.ToString();
+    }
+}
+
+---------------------------------------------------------
+(0): ReSharper Warning: (T) '1' (E) 'M1'
+(1): ReSharper Warning: (T) '0' (E) 'M2'
