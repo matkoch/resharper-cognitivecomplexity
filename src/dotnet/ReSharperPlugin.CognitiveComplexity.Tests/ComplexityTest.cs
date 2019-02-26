@@ -20,8 +20,9 @@ namespace ReSharperPlugin.CognitiveComplexity.Tests
             return highlighting is WarningHighlighting;
         }
 
+        [Test] public void TestConditionTest() { DoNamedTest2(); }
         [Test] public void TestNullCheckingTest() { DoNamedTest2(); }
-        [Test] public void TestNestingTest() { DoNamedTest2(); }
+        [Test] public void TestLoopingTest() { DoNamedTest2(); }
         [Test] public void TestLogicalOperatorTest() { DoNamedTest2(); }
         [Test] public void TestSwitchTest() { DoNamedTest2(); }
         [Test] public void TestRecursiveTest() { DoNamedTest2(); }

@@ -7,7 +7,7 @@ public class A
     {
         var task = Task.Run(() =>
         {
-            if (b) // +2
+            if (b) // +2 (N=1)
                 Console.WriteLine();
         });
     }
@@ -16,7 +16,7 @@ public class A
     {
         var task = Task.Run(delegate
         {
-            if (b) // +2
+            if (b) // +2 (N=1)
                 Console.WriteLine();
         });
     }

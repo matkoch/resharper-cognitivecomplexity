@@ -1,0 +1,65 @@
+﻿using System;
+using System.Reflection.Emit;
+
+public class A
+{
+    public void |M1|(0)()
+    {
+    MyLabel:
+        for (var i = 0; i < 100; i++) // +1
+        {
+            foreach (var c in "") // +2 (N=1)
+            {
+                while (true) // +3 (N=2)
+                {
+                    do // +4 (N=3)
+                    {
+                        if (true) // +5 (N=4)
+                            goto MyLabel; // +1
+                    } while (false);
+                }
+            }
+        }
+    }
+    
+    public void |M2|(1)()
+    {
+        for (var i = 0; i < 100; i++) // +1
+        {
+        }
+        
+        foreach (var c in "") // +1
+        {
+        }
+
+        while (true) // +1
+        {
+        }
+        
+        do // +1
+        {
+        } while (false);
+        
+    MyLabel: // +1
+        goto MyLabel;
+    }
+
+    public void |M3|(2)()
+    {
+        foreach (var c in "") // +1
+        {
+            if (true) // +2 (N=1)
+                continue; // +1
+
+            if (false) // +2 (N=1)
+                break; // +1
+
+            Console.WriteLine();
+        }
+    }
+}
+
+---------------------------------------------------------
+(0): ReSharper Warning: (T) '16' (E) 'M1'
+(1): ReSharper Warning: (T) '5' (E) 'M2'
+(2): ReSharper Warning: (T) '7' (E) 'M3'

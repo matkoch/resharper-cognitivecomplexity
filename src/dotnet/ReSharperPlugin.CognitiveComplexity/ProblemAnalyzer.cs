@@ -1,13 +1,14 @@
 ﻿using JetBrains.Application.Settings;
+using JetBrains.ReSharper.Daemon.CodeInsights;
 using JetBrains.ReSharper.Feature.Services.Daemon;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.CSharp.Tree;
 using JetBrains.ReSharper.Psi.CSharp.Util;
-using JetBrains.ReSharper.Psi.JavaScript.Tree;
 using JetBrains.ReSharper.Psi.Tree;
 using JetBrains.UI.Icons;
 using ReSharperPlugin.CognitiveComplexity.Options;
 using IBinaryExpression = JetBrains.ReSharper.Psi.CSharp.Tree.IBinaryExpression;
+using IDoStatement = JetBrains.ReSharper.Psi.CSharp.Tree.IDoStatement;
 using IForeachStatement = JetBrains.ReSharper.Psi.CSharp.Tree.IForeachStatement;
 using IForStatement = JetBrains.ReSharper.Psi.CSharp.Tree.IForStatement;
 using IIfStatement = JetBrains.ReSharper.Psi.CSharp.Tree.IIfStatement;
@@ -61,8 +62,8 @@ namespace ReSharperPlugin.CognitiveComplexity
             element.Body.ProcessDescendants(elementProcessor);
 
             var store = data.SettingsStore;
-            var baseThreshold = store.GetIndexedValue((CognitiveComplexityAnalysisSettings s) => s.Thresholds, element.Language.Name) ??
-                                CognitiveComplexityAnalysisSettings.DefaultThreshold;
+            var baseThreshold = store.GetIndexedValue((CognitiveComplexityAnalysisSettings s) => s.Thresholds, element.Language.Name);
+                                // ?? CognitiveComplexityAnalysisSettings.DefaultThreshold;
             var lowThreshold = store.GetValue((CognitiveComplexityAnalysisSettings s) => s.LowComplexityThreshold);
             var middleThreshold = store.GetValue((CognitiveComplexityAnalysisSettings s) => s.MiddleComplexityThreshold);
             var highThreshold = store.GetValue((CognitiveComplexityAnalysisSettings s) => s.HighComplexityThreshold);
@@ -92,11 +93,12 @@ namespace ReSharperPlugin.CognitiveComplexity
             else
             {
                 iconId = ComplexityLow.Id;
-                codeLensText = $"{complexityPercentage}%";
+                codeLensText = string.Empty;
+//                codeLensText = $"{complexityPercentage}%";
             }
 
-//            consumer.AddHighlighting(
-//                new WarningHighlighting(element, elementProcessor.Complexity));
+            consumer.AddHighlighting(
+                new WarningHighlighting(element, elementProcessor.ComplexityScore));
 #if RIDER
             var moreText =
                 $"Cognitive complexity value of {elementProcessor.ComplexityScore} " +
@@ -153,6 +155,19 @@ namespace ReSharperPlugin.CognitiveComplexity
                     ComplexityScore += _nesting + 1;
                     _nesting++;
                 }
+                
+                if (element is IGotoStatement ||
+                    element is IBreakStatement ||
+                    element is IContinueStatement ||
+                    element is ICSharpStatement statement && IfStatementNavigator.GetByElse(statement) != null ||
+                    element is IConditionalOrExpression && HasParent<IConditionalAndExpression>(element) ||
+                    element is IConditionalAndExpression && HasParent<IConditionalOrExpression>(element) ||
+                    element is ICSharpExpression expression && expression.HasRecursion(_element) ||
+                    element is IConditionalOrExpression && !HasParent<IBinaryExpression>(element) ||
+                    element is IConditionalAndExpression && !HasParent<IBinaryExpression>(element))
+                {
+                    ComplexityScore++;
+                }
 
                 if (element is ICatchClause catchClause)
                 {
@@ -167,36 +182,14 @@ namespace ReSharperPlugin.CognitiveComplexity
                 {
                     _nesting++;
                 }
-
-                if (element is IFinallyBlock)
-                {
-                    ComplexityScore++;
-                }
-
-                if (element is IConditionalOrExpression && HasParent<IConditionalAndExpression>(element) ||
-                    element is IConditionalAndExpression && HasParent<IConditionalOrExpression>(element))
-                {
-                    ComplexityScore++;
-                }
-
-                if (element is ICSharpExpression csharpExpression &&
-                    csharpExpression.HasRecursion(_element))
-                {
-                    ComplexityScore++;
-                }
-
-                if ((element is IConditionalOrExpression || element is IConditionalAndExpression) &&
-                    !HasParent<IBinaryExpression>(element))
-                {
-                    ComplexityScore++;
-                }
             }
 
             private static bool IsNestingStatement(ITreeNode element)
             {
                 return element is IWhileStatement ||
                        element is ISwitchStatement ||
-                       element is IIfStatement ||
+                       element is IDoStatement ||
+                       element is IIfStatement ifStatement && IfStatementNavigator.GetByElse(ifStatement) == null ||
                        element is IForStatement ||
                        element is IForeachStatement;
             }
@@ -221,12 +214,8 @@ namespace ReSharperPlugin.CognitiveComplexity
             public void ProcessAfterInterior(ITreeNode element)
             {
                 if (IsNestingStatement(element) ||
-                    element is ICatchClause)
-                {
-                    _nesting--;
-                }
-                
-                if (element is ILambdaExpression ||
+                    element is ICatchClause ||
+                    element is ILambdaExpression ||
                     element is IAnonymousMethodExpression)
                 {
                     _nesting--;

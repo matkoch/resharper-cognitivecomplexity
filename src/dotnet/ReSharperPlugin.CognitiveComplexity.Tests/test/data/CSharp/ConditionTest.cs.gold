@@ -5,23 +5,26 @@ public class A
 {
     public void |M1|(0)(bool b)
     {
-        var task = Task.Run(() =>
-        {
-            if (b) // +2 (N=1)
-                Console.WriteLine();
-        });
+        if (b) // +1
+            Console.WriteLine();
+        else // +1
+            Console.WriteLine();
     }
     
     public void |M2|(1)(bool b)
     {
-        var task = Task.Run(delegate
+        if (true) // +1
         {
             if (b) // +2 (N=1)
                 Console.WriteLine();
-        });
+            else if (!b) // +1
+                Console.WriteLine();
+            else // +1
+                Console.WriteLine();
+        }
     }
 }
 
 ---------------------------------------------------------
 (0): ReSharper Warning: (T) '2' (E) 'M1'
-(1): ReSharper Warning: (T) '2' (E) 'M2'
+(1): ReSharper Warning: (T) '5' (E) 'M2'
