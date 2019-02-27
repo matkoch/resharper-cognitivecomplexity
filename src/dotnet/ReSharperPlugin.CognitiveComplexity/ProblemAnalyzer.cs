@@ -56,10 +56,7 @@ namespace ReSharperPlugin.CognitiveComplexity
             element.Body.ProcessDescendants(elementProcessor);
 
             var store = data.SettingsStore;
-            var baseThreshold = store.GetIndexedValue((CognitiveComplexityAnalysisSettings s) => s.Thresholds, element.Language.Name);
-            if (baseThreshold <= 0)
-                baseThreshold = CognitiveComplexityAnalysisSettings.DefaultThreshold;
-            
+            var baseThreshold = store.GetValue((CognitiveComplexityAnalysisSettings s) => s.CSharpThreshold);
             var lowThreshold = store.GetValue((CognitiveComplexityAnalysisSettings s) => s.LowComplexityThreshold);
             var middleThreshold = store.GetValue((CognitiveComplexityAnalysisSettings s) => s.MiddleComplexityThreshold);
             var highThreshold = store.GetValue((CognitiveComplexityAnalysisSettings s) => s.HighComplexityThreshold);

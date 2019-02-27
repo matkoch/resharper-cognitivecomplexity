@@ -30,34 +30,6 @@ namespace ReSharperPlugin.CognitiveComplexity.Options
             ILanguageManager languageManager)
             : base(lifetime, optionsPageContext, optionsSettingsSmartContext)
         {
-            AddText("Language specific thresholds:");
-
-            var thresholds =
-                OptionsSettingsSmartContext.Schema.GetIndexedEntry((CognitiveComplexityAnalysisSettings s) =>
-                    s.Thresholds);
-
-            var list = new List<LanguageSpecificComplexityProperty>();
-            foreach (var languageType in languages.All.Where(languageManager.HasService<IControlFlowBuilder>)
-                .OrderBy(GetPresentableName))
-            {
-                var presentableName = GetPresentableName(languageType);
-                var thing = new LanguageSpecificComplexityProperty(lifetime, optionsSettingsSmartContext, thresholds,
-                    languageType.Name, presentableName, CognitiveComplexityAnalysisSettings.DefaultThreshold);
-                list.Add(thing);
-            }
-
-            var treeGrid = list.GetBeList(lifetime,
-                (l, e, p) => new List<BeControl>
-                {
-                    e.Name.GetBeLabel(),
-                    e.Threshold.GetBeSpinner(lifetime, min: 1)
-                },
-                new TreeConfiguration(new[] {"Language,*", "Threshold,auto"}));
-
-            AddControl(treeGrid, isStar: true);
-            
-            AddText("CodeVision thresholds (in %):");
-
             (Property<int> Property, BeSpinner Spinner) CreateComplexity(
                 string id,
                 Expression<Func<CognitiveComplexityAnalysisSettings, int>> setting)
@@ -66,6 +38,41 @@ namespace ReSharperPlugin.CognitiveComplexity.Options
                 optionsSettingsSmartContext.SetBinding(lifetime, setting, property);
                 return (property, property.GetBeSpinner(lifetime));
             }
+            
+            AddText("Language specific thresholds:");
+            
+            var csharpComplexity = CreateComplexity("csharp", s => s.CSharpThreshold);
+
+            using (Indent())
+            {
+                AddControl(csharpComplexity.Spinner.WithDescription("CSharp:", lifetime));
+            }
+
+//            var thresholds =
+//                OptionsSettingsSmartContext.Schema.GetIndexedEntry((CognitiveComplexityAnalysisSettings s) =>
+//                    s.CSharpThreshold);
+//
+//            var list = new List<LanguageSpecificComplexityProperty>();
+//            foreach (var languageType in languages.All.Where(languageManager.HasService<IControlFlowBuilder>)
+//                .OrderBy(GetPresentableName))
+//            {
+//                var presentableName = GetPresentableName(languageType);
+//                var thing = new LanguageSpecificComplexityProperty(lifetime, optionsSettingsSmartContext, thresholds,
+//                    languageType.Name, presentableName, CognitiveComplexityAnalysisSettings.DefaultThreshold);
+//                list.Add(thing);
+//            }
+//
+//            var treeGrid = list.GetBeList(lifetime,
+//                (l, e, p) => new List<BeControl>
+//                {
+//                    e.Name.GetBeLabel(),
+//                    e.Threshold.GetBeSpinner(lifetime, min: 1)
+//                },
+//                new TreeConfiguration(new[] {"Language,*", "Threshold,auto"}));
+//
+//            AddControl(treeGrid, isStar: true);
+            
+            AddText("CodeVision thresholds (in %):");
 
             var lowComplexity = CreateComplexity("low", s => s.LowComplexityThreshold);
             var middleComplexity = CreateComplexity("middle", s => s.MiddleComplexityThreshold);

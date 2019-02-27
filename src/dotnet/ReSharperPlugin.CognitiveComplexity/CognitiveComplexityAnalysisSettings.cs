@@ -17,7 +17,7 @@ namespace ReSharperPlugin.CognitiveComplexity.Options
         [SettingsEntry(150, "Refactor me?")]
         public int HighComplexityThreshold { get; set; }
 
-        [SettingsIndexedEntry("Threshold per language")]
-        public IIndexedEntry<string, int> Thresholds;
+        [SettingsEntry(DefaultThreshold, "CSharp Threshold")]
+        public int CSharpThreshold;
     }
 }
