@@ -1,4 +1,4 @@
-﻿using JetBrains.Application.Settings;
+using JetBrains.Application.Settings;
 using JetBrains.ReSharper.Daemon.CodeInsights;
 using JetBrains.ReSharper.Feature.Services.Daemon;
 using JetBrains.ReSharper.Psi;
@@ -154,6 +154,9 @@ namespace ReSharperPlugin.CognitiveComplexity
                 {
                     ComplexityScore += _nesting + 1;
                     _nesting++;
+                    
+                    if (element is ICatchClause clause && clause.Filter != null)
+                        ComplexityScore++;
                 }
                 
                 if (element is IGotoStatement ||
@@ -167,14 +170,6 @@ namespace ReSharperPlugin.CognitiveComplexity
                     element is IConditionalAndExpression && !HasParent<IBinaryExpression>(element))
                 {
                     ComplexityScore++;
-                }
-
-                if (element is ICatchClause catchClause)
-                {
-                    _nesting++;
-                    
-                    if (catchClause.Filter != null)
-                        ComplexityScore++;
                 }
 
                 if (element is ILambdaExpression ||
@@ -191,7 +186,8 @@ namespace ReSharperPlugin.CognitiveComplexity
                        element is IDoStatement ||
                        element is IIfStatement ifStatement && IfStatementNavigator.GetByElse(ifStatement) == null ||
                        element is IForStatement ||
-                       element is IForeachStatement;
+                       element is IForeachStatement ||
+                       element is ICatchClause;
             }
 
             private bool HasParent<T>(ITreeNode expression)

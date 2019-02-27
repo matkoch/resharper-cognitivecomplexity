@@ -18,7 +18,7 @@ public class A
                 }
             }
         }
-        catch (Exception e)
+        catch (Exception e) // +1
         {
             if (b) // +2 (N=1)
             {
@@ -30,15 +30,34 @@ public class A
     {
         if (true) // +1
         {
-            try
-            {  
-                throw new Exception("ErrorType1");  
-            }  
-            catch(IndexOutOfRangeException ex) when (ex.Message=="ErrorType1") // +1
+            try { throw new Exception("ErrorType1"); }
+            catch (IndexOutOfRangeException ex) // +2 (N=1)
             {
             }
-            catch(IndexOutOfRangeException ex) when (ex.Message=="ErrorType2") // +1?
+        }
+    }
+    
+    public void M3()
+    {
+        if (true) // +1
+        {
+            try { throw new Exception("ErrorType1"); }
+            catch (Exception ex) when (ex.Message == "ErrorType2") // +2+1 (N=1)
             {
+            }
+        }
+    }
+    
+    public void M4()
+    {
+        if (true) // +1
+        {
+            try { throw new Exception("ErrorType1"); }
+            catch (Exception ex) // +2 (N=1)
+            {
+                if (ex.Message == "ErrorType3") // +3 (N=2)
+                {
+                }
             }
         }
     }
