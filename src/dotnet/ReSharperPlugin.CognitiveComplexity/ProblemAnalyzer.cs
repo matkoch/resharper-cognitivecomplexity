@@ -62,8 +62,8 @@ namespace ReSharperPlugin.CognitiveComplexity
             element.Body.ProcessDescendants(elementProcessor);
 
             var store = data.SettingsStore;
-            var baseThreshold = store.GetIndexedValue((CognitiveComplexityAnalysisSettings s) => s.Thresholds, element.Language.Name);
-                                // ?? CognitiveComplexityAnalysisSettings.DefaultThreshold;
+            var baseThreshold = store.GetIndexedValue((CognitiveComplexityAnalysisSettings s) => s.Thresholds, element.Language.Name)
+                                ?? CognitiveComplexityAnalysisSettings.DefaultThreshold;
             var lowThreshold = store.GetValue((CognitiveComplexityAnalysisSettings s) => s.LowComplexityThreshold);
             var middleThreshold = store.GetValue((CognitiveComplexityAnalysisSettings s) => s.MiddleComplexityThreshold);
             var highThreshold = store.GetValue((CognitiveComplexityAnalysisSettings s) => s.HighComplexityThreshold);
@@ -97,8 +97,8 @@ namespace ReSharperPlugin.CognitiveComplexity
 //                codeLensText = $"{complexityPercentage}%";
             }
 
-            consumer.AddHighlighting(
-                new WarningHighlighting(element, elementProcessor.ComplexityScore));
+//            consumer.AddHighlighting(
+//                new WarningHighlighting(element, elementProcessor.ComplexityScore));
 #if RIDER
             var moreText =
                 $"Cognitive complexity value of {elementProcessor.ComplexityScore} " +

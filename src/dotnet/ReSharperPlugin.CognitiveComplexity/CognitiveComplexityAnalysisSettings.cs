@@ -18,6 +18,6 @@ namespace ReSharperPlugin.CognitiveComplexity.Options
         public int HighComplexityThreshold { get; set; }
 
         [SettingsIndexedEntry("Threshold per language")]
-        public IIndexedEntry<string, int> Thresholds;
+        public IIndexedEntry<string, int?> Thresholds;
     }
 }
