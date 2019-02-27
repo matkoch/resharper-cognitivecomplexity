@@ -34,16 +34,13 @@ namespace ReSharperPlugin.CognitiveComplexity
     {
 #if RIDER
         private readonly OverallCodeInsightsProvider _overallProvider;
-        private readonly IncreaseCodeInsightsProvider _increaseProvider;
         private readonly IconHost _iconHost;
 
         public ProblemAnalyzer(
             OverallCodeInsightsProvider overallProvider,
-            IncreaseCodeInsightsProvider increaseProvider,
             IconHost iconHost)
         {
             _overallProvider = overallProvider;
-            _increaseProvider = increaseProvider;
             _iconHost = iconHost;
         }
 #endif
@@ -54,16 +51,15 @@ namespace ReSharperPlugin.CognitiveComplexity
                 return;
                 
             var elementProcessor = new ElementProcessor(
-#if RIDER
-                _increaseProvider,
-#endif
                 element,
                 consumer);
             element.Body.ProcessDescendants(elementProcessor);
 
             var store = data.SettingsStore;
-            var baseThreshold = store.GetIndexedValue((CognitiveComplexityAnalysisSettings s) => s.Thresholds, element.Language.Name)
-                                ?? CognitiveComplexityAnalysisSettings.DefaultThreshold;
+            var baseThreshold = store.GetIndexedValue((CognitiveComplexityAnalysisSettings s) => s.Thresholds, element.Language.Name);
+            if (baseThreshold <= 0)
+                baseThreshold = CognitiveComplexityAnalysisSettings.DefaultThreshold;
+            
             var lowThreshold = store.GetValue((CognitiveComplexityAnalysisSettings s) => s.LowComplexityThreshold);
             var middleThreshold = store.GetValue((CognitiveComplexityAnalysisSettings s) => s.MiddleComplexityThreshold);
             var highThreshold = store.GetValue((CognitiveComplexityAnalysisSettings s) => s.HighComplexityThreshold);
@@ -117,24 +113,15 @@ namespace ReSharperPlugin.CognitiveComplexity
 
         class ElementProcessor : IRecursiveElementProcessor
         {
-#if RIDER
-            private readonly IncreaseCodeInsightsProvider _increaseProvider;
-#endif
             private readonly ICSharpFunctionDeclaration _element;
             private readonly IHighlightingConsumer _consumer;
             
             private int _nesting = 0;
 
             public ElementProcessor(
-#if RIDER
-                IncreaseCodeInsightsProvider increaseProvider,
-#endif
                 ICSharpFunctionDeclaration element,
                 IHighlightingConsumer consumer)
             {
-#if RIDER
-                _increaseProvider = increaseProvider;
-#endif
                 _element = element;
                 _consumer = consumer;
             }

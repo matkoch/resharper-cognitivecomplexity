@@ -37,25 +37,6 @@ namespace ReSharperPlugin.CognitiveComplexity
             {new CodeLensRelativeOrderingFirst()};
     }
     
-    [SolutionComponent]
-    public class IncreaseCodeInsightsProvider : ICodeInsightsProvider
-    {
-        public void OnClick(CodeInsightsHighlighting highlighting)
-        {
-        }
-
-        public void OnExtraActionClick(CodeInsightsHighlighting highlighting, string actionId)
-        {
-        }
-
-        public string ProviderId => nameof(IncreaseCodeInsightsProvider);
-        public string DisplayName => "Cognitive Complexity (Increase)";
-        public CodeLensAnchorKind DefaultAnchor => CodeLensAnchorKind.EmptySpace;
-
-        public ICollection<CodeLensRelativeOrdering> RelativeOrderings => new CodeLensRelativeOrdering[]
-            {new CodeLensRelativeOrderingFirst()};
-    }
-
     // TODO: What is "CSharpInfo"?
 //    [StaticSeverityHighlighting(Severity.INFO, "CSharpInfo", AttributeId = HighlightAttributeId)]
 //    public class CodeInsightsHighlighting : JetBrains.ReSharper.Daemon.CodeInsights.CodeInsightsHighlighting

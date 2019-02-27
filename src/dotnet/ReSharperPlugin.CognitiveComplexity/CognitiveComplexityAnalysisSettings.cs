@@ -6,7 +6,7 @@ namespace ReSharperPlugin.CognitiveComplexity.Options
     [SettingsKey(typeof (CodeInspectionSettings), "Cognitive complexity analysis")]
     public class CognitiveComplexityAnalysisSettings
     {
-        public const int DefaultThreshold = 5;
+        public const int DefaultThreshold = 10;
 
         [SettingsEntry(80, "Mildly complex")]
         public int LowComplexityThreshold { get; set; }
@@ -18,6 +18,6 @@ namespace ReSharperPlugin.CognitiveComplexity.Options
         public int HighComplexityThreshold { get; set; }
 
         [SettingsIndexedEntry("Threshold per language")]
-        public IIndexedEntry<string, int?> Thresholds;
+        public IIndexedEntry<string, int> Thresholds;
     }
 }
