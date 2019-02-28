@@ -16,3 +16,7 @@ A options page is located under **Frameworks & Languages | Cognitive Complexity*
 The **language specific threshold** indicates what you consider the maximum allowed value for the Cognitive Complexity metric. **Code Vision thresholds** define how the value is represented in the UI:
 
 <img src="https://github.com/matkoch/resharper-cognitivecomplexity/blob/master/thresholds.png" width="500" />
+
+:warning: Changing the value might require focusing another input to apply it. This is currently a bug on Rider side.
+
+Depending on your individual preferences, you can disable for instance the _simple enough_ interval, by changing it's percentage threshold to the same as _mildly complex_.
