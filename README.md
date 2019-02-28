@@ -6,3 +6,15 @@
 This plugin implements live calculation of the **Cognitive Complexity** metric, which was proposed by G. Ann Campbell in [Cognitive Complexity - A new way of measuring understandability](https://www.sonarsource.com/docs/CognitiveComplexity.pdf) (c) SonarSource S.A. 2016-2018, Switzerland.
 
 > **Abstract:** Cyclomatic Complexity was initially formulated as a measurement of the "testability and maintainability" of the control flow of a module. While it excels at measuring the former, its underlying mathematical model is unsatisfactory at producing a value that measures the latter. This white paper describes a new metric that breaks from the use of mathematical models to evaluate code in order to remedy Cyclomatic Complexity’s shortcomings and produce a measurement that more accurately reflects the relative difficulty of understanding, and therefore of maintaining methods, classes, and applications.
+
+## Configuration
+
+A options page is located under **Frameworks & Languages | Cognitive Complexity**, which allows to configure the visual representation.
+
+<img src="https://github.com/matkoch/resharper-cognitivecomplexity/blob/master/options.png" width="500" />
+
+The language specific threshold indicates what you consider the maximum allowed value for the Cognitive Complexity metric.
+
+The Code Vision thresholds define how the value is represented in the UI:
+
+<img src="https://github.com/matkoch/resharper-cognitivecomplexity/blob/master/thresholds.png" width="500" />
