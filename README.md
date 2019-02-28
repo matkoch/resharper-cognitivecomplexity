@@ -11,9 +11,9 @@ This plugin implements live calculation of the **Cognitive Complexity** metric, 
 
 A options page is located under **Frameworks & Languages | Cognitive Complexity**, which allows to configure the visual representation.
 
-:warning: Changing a value might require focusing another input to apply it. This is currently a bug on Rider side.
-
 <img src="https://github.com/matkoch/resharper-cognitivecomplexity/blob/master/options.png" width="500" />
+
+:warning: Changing a value might require focusing another input to apply it. This is currently a bug on Rider side.
 
 The **language specific threshold** indicates what you consider the maximum allowed value for the Cognitive Complexity metric. **Code Vision thresholds** define how the value is represented in the UI:
 
