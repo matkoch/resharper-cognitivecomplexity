@@ -181,7 +181,7 @@ namespace ReSharperPlugin.CognitiveComplexity
                 {
                     case IUnaryOperatorExpression unaryOperatorExpression
                         when unaryOperatorExpression.UnaryOperatorType == UnaryOperatorType.EXCL:
-                        return HasParent<T>(unaryOperatorExpression.OperatorOperands[0]);
+                        return HasParent<T>(unaryOperatorExpression);
                     case IParenthesizedExpression parenthesizedExpression:
                         return HasParent<T>(parenthesizedExpression);
                     case T _:
