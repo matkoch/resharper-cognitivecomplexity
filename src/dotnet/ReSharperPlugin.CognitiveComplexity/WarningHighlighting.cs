@@ -21,21 +21,24 @@ namespace ReSharperPlugin.CognitiveComplexity
         CSharpLanguage.Name,
         OverlapResolve = OverlapResolveKind.ERROR,
         OverloadResolvePriority = 0,
-        ToolTipFormatString = Message)]
+        ToolTipFormatString = ToolTipFormatString)]
     public class WarningHighlighting : IHighlighting
     {
         public const string SeverityId = nameof(WarningHighlighting);
-        public const string Message = "Sample highlighting message";
-        public const string Description = "Sample highlighting description";
+        public const string Message = "Element exceeds Cognitive Complexity threshold";
+        public const string Description = "The cognitive complexity of the code element exceeds the configured threshold. " +
+                                          "You can configure the thresholds in the Cognitive Complexity options page.";
+
+        public const string ToolTipFormatString = Message + " ({0}%)";
         
-        public WarningHighlighting(ICSharpFunctionDeclaration declaration, int complexity)
+        public WarningHighlighting(ICSharpFunctionDeclaration declaration, int complexityPercentage)
         {
             Declaration = declaration;
-            Complexity = complexity;
+            ComplexityPercentage = complexityPercentage;
         }
 
         public ICSharpFunctionDeclaration Declaration { get; }
-        public int Complexity { get; }
+        public int ComplexityPercentage { get; }
 
         public bool IsValid()
         {
@@ -47,7 +50,7 @@ namespace ReSharperPlugin.CognitiveComplexity
             return Declaration.NameIdentifier?.GetHighlightingRange() ?? DocumentRange.InvalidRange;
         }
 
-        public string ToolTip => Complexity.ToString();
+        public string ToolTip => string.Format(ToolTipFormatString, ComplexityPercentage);
         
         public string ErrorStripeToolTip
             => Declaration.DeclaredName;

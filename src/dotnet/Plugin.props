@@ -11,7 +11,7 @@
     <PackageTags>resharper plugin cognitive  complexity  metric</PackageTags>
   
     <PackageProjectUrl>https://github.com/matkoch/resharper-cognitivecomplexity</PackageProjectUrl>
-    <PackageLicenseUrl></PackageLicenseUrl>
+    <PackageLicenseUrl>https://github.com/matkoch/resharper-cognitivecomplexity/blob/master/LICENSE</PackageLicenseUrl>
     <PackageIconUrl></PackageIconUrl>
   </PropertyGroup>
 </Project>

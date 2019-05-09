@@ -44,69 +44,6 @@ namespace ReSharperPlugin.CognitiveComplexity
             _iconHost = iconHost;
         }
 #endif
-        
-        protected override void Run(ICSharpFunctionDeclaration element, ElementProblemAnalyzerData data, IHighlightingConsumer consumer)
-        {
-            if (element.Body == null)
-                return;
-                
-            var elementProcessor = new ElementProcessor(
-                element,
-                consumer);
-            element.Body.ProcessDescendants(elementProcessor);
-
-            var store = data.SettingsStore;
-            var baseThreshold = store.GetValue((CognitiveComplexityAnalysisSettings s) => s.CSharpThreshold);
-            var lowThreshold = store.GetValue((CognitiveComplexityAnalysisSettings s) => s.LowComplexityThreshold);
-            var middleThreshold = store.GetValue((CognitiveComplexityAnalysisSettings s) => s.MiddleComplexityThreshold);
-            var highThreshold = store.GetValue((CognitiveComplexityAnalysisSettings s) => s.HighComplexityThreshold);
-
-            var complexityPercentage = (int) (elementProcessor.ComplexityScore * 100.0 / baseThreshold);
-            
-            string codeLensText;
-            IconId iconId;
-
-            if (complexityPercentage >= highThreshold)
-            {
-                iconId = ComplexityExtreme.Id;
-                codeLensText = complexityPercentage >= highThreshold * 2
-                    ? $"refactor me? ({complexityPercentage}%)"
-                    : $"very complex ({complexityPercentage}%)";
-            }
-            else if (complexityPercentage >= middleThreshold)
-            {
-                iconId = ComplexityHigh.Id;
-                codeLensText = $"mildly complex ({complexityPercentage}%)";
-            }
-            else if (complexityPercentage >= lowThreshold)
-            {
-                iconId = ComplexityAverage.Id;
-                codeLensText = $"simple enough ({complexityPercentage}%)";
-            }
-            else
-            {
-                iconId = ComplexityLow.Id;
-                codeLensText = string.Empty;
-//                codeLensText = $"{complexityPercentage}%";
-            }
-
-//            consumer.AddHighlighting(
-//                new WarningHighlighting(element, elementProcessor.ComplexityScore));
-#if RIDER
-            var moreText =
-                $"Cognitive complexity value of {elementProcessor.ComplexityScore} " +
-                $"({complexityPercentage}% of threshold {baseThreshold})";
-            consumer.AddHighlighting(
-                new CodeInsightsHighlighting(
-                    element.GetNameDocumentRange(),
-                    codeLensText,
-                    moreText,
-                    _overallProvider,
-                    element.DeclaredElement,
-                    _iconHost.Transform(iconId))
-                );
-#endif
-        }
 
         class ElementProcessor : IRecursiveElementProcessor
         {
@@ -201,6 +138,69 @@ namespace ReSharperPlugin.CognitiveComplexity
                     _nesting--;
                 }
             }
+        }
+
+        protected override void Run(ICSharpFunctionDeclaration element, ElementProblemAnalyzerData data, IHighlightingConsumer consumer)
+        {
+            if (element.Body == null)
+                return;
+                
+            var elementProcessor = new ElementProcessor(
+                element,
+                consumer);
+            element.Body.ProcessDescendants(elementProcessor);
+
+            var store = data.SettingsStore;
+            var baseThreshold = store.GetValue((CognitiveComplexityAnalysisSettings s) => s.CSharpThreshold);
+            var lowThreshold = store.GetValue((CognitiveComplexityAnalysisSettings s) => s.LowComplexityThreshold);
+            var middleThreshold = store.GetValue((CognitiveComplexityAnalysisSettings s) => s.MiddleComplexityThreshold);
+            var highThreshold = store.GetValue((CognitiveComplexityAnalysisSettings s) => s.HighComplexityThreshold);
+
+            var complexityPercentage = (int) (elementProcessor.ComplexityScore * 100.0 / baseThreshold);
+            
+            string codeLensText;
+            IconId iconId;
+
+            if (complexityPercentage >= highThreshold)
+            {
+                iconId = ComplexityExtreme.Id;
+                codeLensText = complexityPercentage >= highThreshold * 2
+                    ? $"refactor me? ({complexityPercentage}%)"
+                    : $"very complex ({complexityPercentage}%)";
+            }
+            else if (complexityPercentage >= middleThreshold)
+            {
+                iconId = ComplexityHigh.Id;
+                codeLensText = $"mildly complex ({complexityPercentage}%)";
+            }
+            else if (complexityPercentage >= lowThreshold)
+            {
+                iconId = ComplexityAverage.Id;
+                codeLensText = $"simple enough ({complexityPercentage}%)";
+            }
+            else
+            {
+                iconId = ComplexityLow.Id;
+                codeLensText = string.Empty;
+            }
+
+            if (complexityPercentage > 100)
+                consumer.AddHighlighting(new WarningHighlighting(element, complexityPercentage));
+            
+#if RIDER
+            var moreText =
+                $"Cognitive complexity value of {elementProcessor.ComplexityScore} " +
+                $"({complexityPercentage}% of threshold {baseThreshold})";
+            consumer.AddHighlighting(
+                new CodeInsightsHighlighting(
+                    element.GetNameDocumentRange(),
+                    codeLensText,
+                    moreText,
+                    _overallProvider,
+                    element.DeclaredElement,
+                    _iconHost.Transform(iconId))
+                );
+#endif
         }
     }
 }
