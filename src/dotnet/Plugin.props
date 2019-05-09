@@ -1,6 +1,6 @@
 <Project>
   <PropertyGroup>
-    <SdkVersion>2018.3.0-*</SdkVersion>
+    <SdkVersion>2019.1.0</SdkVersion>
     
     <Title>CognitiveComplexity</Title>
     <Description>This plugin implements live calculation of the Cognitive Complexity metric, which was proposed by G. Ann Campbell in Cognitive Complexity - A new way of measuring understandability (c) SonarSource S.A. 2016-2018, Switzerland.
