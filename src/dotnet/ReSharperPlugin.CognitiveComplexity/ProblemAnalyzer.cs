@@ -196,6 +196,7 @@ namespace ReSharperPlugin.CognitiveComplexity
                     element.GetNameDocumentRange(),
                     codeLensText,
                     moreText,
+                    moreText,
                     _overallProvider,
                     element.DeclaredElement,
                     _iconHost.Transform(iconId))
