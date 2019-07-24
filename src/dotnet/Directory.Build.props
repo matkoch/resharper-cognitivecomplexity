@@ -1,7 +1,6 @@
 <Project>
   
   <PropertyGroup>
-    <LangVersion>Latest</LangVersion>
     <NoPackageAnalysis>true</NoPackageAnalysis>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>None</ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>

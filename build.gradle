@@ -6,30 +6,29 @@ buildscript {
         mavenCentral()
     }
 
-    dependencies { classpath "com.jetbrains.rd:rd-gen:0.1.18" }
+    dependencies {
+        classpath("com.jetbrains.rd:rd-gen:0.192.2")
+    }
 }
 
 plugins {
     id 'java'
-    id 'org.jetbrains.kotlin.jvm' version '1.2.50'
-    id 'org.jetbrains.intellij' version '0.3.2'
+    id 'org.jetbrains.kotlin.jvm' version '1.3.41'
+    id 'org.jetbrains.intellij' version '0.4.7'
 }
 
 ext {
-    repoRoot = new File(".").canonicalFile
+    repoRoot = projectDir
     isWindows = Os.isFamily(Os.FAMILY_WINDOWS)
-    sdkVersion = "2019.1"
-    rdLibDirectory = new File(repoRoot, "build/riderRD-$sdkVersion-SNAPSHOT/lib/rd")
+    rdLibDirectory = new File(repoRoot, "build/riderRD-${ProductVersion}/lib/rd")
     dotNetDir = new File(repoRoot, "src/dotnet")
-    dotNetPluginId = "ReSharperPlugin.CognitiveComplexity"
-    dotnetSolution = new File(repoRoot, "CognitiveComplexity.sln")
+    dotNetPluginId = "${PluginNamespace}.${PluginName}"
+    dotnetSolution = new File(repoRoot, "${PluginName}.sln")
 }
 
 repositories {
-    maven { url 'https://repo.labs.intellij.net/central-proxy' }
-    maven { url 'https://repo.labs.intellij.net/rd-snapshots-maven' }
-//  maven { url 'https://repo.labs.intellij.net/jitpack.io' }
-//  mavenLocal()
+    maven { url 'https://cache-redirector.jetbrains.com/intellij-repository/snapshots' }
+    maven { url 'https://cache-redirector.jetbrains.com/maven-central' }
     flatDir { dirs rdLibDirectory.absolutePath }
 }
 
@@ -39,21 +38,10 @@ wrapper {
     distributionUrl = "https://cache-redirector.jetbrains.com/services.gradle.org/distributions/gradle-${gradleVersion}-all.zip"
 }
 
-if (!ext.has("BuildConfiguration"))
-    ext.BuildConfiguration = "Release"
+version = ext.PluginVersion
 
-if (ext.has("pluginVersion"))
-    ext.version = ext.pluginVersion
-else
-    ext.version = "1.3.3.7"
-
-if (ext.has("username"))
-    intellij.publish.username = ext.username
-
-if (ext.has("password"))
-    intellij.publish.password = ext.password
-
-version ext.version
+if (ext.has("username")) intellij.publish.username = ext.username
+if (ext.has("password")) intellij.publish.password = ext.password
 
 sourceSets {
     main {
@@ -71,7 +59,7 @@ task findMsBuild {
         ByteArrayOutputStream stdout = new ByteArrayOutputStream()
         if (isWindows) {
             exec {
-                executable "$repoRoot\\tools\\vswhere.exe"
+                executable "${repoRoot}\\tools\\vswhere.exe"
                 args '-latest','-property','installationPath'
                 standardOutput = stdout
                 workingDir project.rootDir
@@ -95,7 +83,7 @@ task compileDotNet {
     doLast {
         exec {
             executable findMsBuild.executable
-            args "/t:Restore;Rebuild","$dotnetSolution","/v:minimal","/p:Configuration=$BuildConfiguration"
+            args "/t:Restore;Rebuild","${dotnetSolution}","/v:minimal","/p:Configuration=${BuildConfiguration}"
         }
     }
 }
@@ -117,28 +105,28 @@ buildPlugin {
 
         exec {
             executable findMsBuild.executable
-            args "/t:Pack","$dotnetSolution","/v:minimal","/p:Configuration=$BuildConfiguration","/p:PackageOutputPath=$rootDir/output","/p:PackageReleaseNotes=$changeNotes","/p:PackageVersion=$version"
+            args "/t:Pack","$dotnetSolution","/v:minimal","/p:Configuration=${BuildConfiguration}","/p:PackageOutputPath=$rootDir/output","/p:PackageReleaseNotes=${changeNotes}","/p:PackageVersion=${version}"
         }
     }
 }
 
 intellij {
     type = 'RD'
-    version = "$sdkVersion"
-    //localPath = new File(repoRoot, "build/riderRD-2018.3-SNAPSHOT")
+    version = "${ProductVersion}"
     downloadSources = false
+    instrumentCode = false
 }
 
 apply plugin: 'com.jetbrains.rdgen'
 
 rdgen {
     def modelDir = new File(repoRoot, "protocol/src/main/kotlin/model")
-    def csOutput = new File(repoRoot, "src/dotnet/ReSharperPlugin.CognitiveComplexity/Rider/Model")
-    def ktOutput = new File(repoRoot, "src/rider/main/kotlin/cognitivecomplexity/model")
+    def csOutput = new File(repoRoot, "src/dotnet/${dotNetPluginId}/Rider/Model")
+    def ktOutput = new File(repoRoot, "src/rider/main/kotlin/${PluginName.toLowerCase()}/model")
 
     verbose = true
-    classpath "$rdLibDirectory/rider-model.jar"
-    sources "$modelDir/rider"
+    classpath "${rdLibDirectory}/rider-model.jar"
+    sources "${modelDir}/rider"
     hashFolder = 'build/rdgen/rider'
     packages = "model.rider"
 
@@ -160,7 +148,7 @@ rdgen {
 }
 
 patchPluginXml {
-    def changelogText = file("$repoRoot/CHANGELOG.md").text
+    def changelogText = file("${repoRoot}/CHANGELOG.md").text
     def changelogMatches = changelogText =~ /(?s)(-.+?)(?=##|$)/
 
     changeNotes = changelogMatches.collect {
@@ -171,7 +159,7 @@ patchPluginXml {
 prepareSandbox {
     dependsOn compileDotNet
 
-    def outputFolder = "$dotNetDir/$dotNetPluginId/bin/${dotNetPluginId}.Rider/$BuildConfiguration"
+    def outputFolder = "${dotNetDir}/${dotNetPluginId}/bin/${dotNetPluginId}.Rider/${BuildConfiguration}"
     def dllFiles = [
             "$outputFolder/${dotNetPluginId}.dll",
             "$outputFolder/${dotNetPluginId}.pdb"
@@ -179,13 +167,13 @@ prepareSandbox {
 
     dllFiles.forEach({ f ->
         def file = file(f)
-        from(file, { into "$intellij.pluginName/dotnet" })
+        from(file, { into "${intellij.pluginName}/dotnet" })
     })
 
     doLast {
         dllFiles.forEach({ f ->
             def file = file(f)
-            if (!file.exists()) throw new RuntimeException("File $file does not exist")
+            if (!file.exists()) throw new RuntimeException("File ${file} does not exist")
         })
     }
 }

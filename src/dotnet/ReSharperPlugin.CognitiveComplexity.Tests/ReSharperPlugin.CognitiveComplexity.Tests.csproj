@@ -15,7 +15,6 @@
 
   <ItemGroup>
     <Compile Remove="test/**/*" />
-    <None Include="test/**/*" />
   </ItemGroup>
 
 </Project>
