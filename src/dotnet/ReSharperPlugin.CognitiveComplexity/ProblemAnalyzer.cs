@@ -28,7 +28,7 @@ namespace ReSharperPlugin.CognitiveComplexity
         typeof(ICSharpFunctionDeclaration),
         HighlightingTypes = new[]
         {
-            typeof(WarningHighlighting)
+            typeof(CognitiveComplexityHighlighting)
         })]
     public class ProblemAnalyzer : ElementProblemAnalyzer<ICSharpFunctionDeclaration>
     {
@@ -185,7 +185,7 @@ namespace ReSharperPlugin.CognitiveComplexity
             }
 
             if (complexityPercentage > 100)
-                consumer.AddHighlighting(new WarningHighlighting(element, complexityPercentage));
+                consumer.AddHighlighting(new CognitiveComplexityHighlighting(element, complexityPercentage));
             
 #if RIDER
             var moreText =

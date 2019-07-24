@@ -7,11 +7,11 @@ using JetBrains.Util;
 using ReSharperPlugin.CognitiveComplexity;
 
 [assembly: RegisterConfigurableSeverity(
-    WarningHighlighting.SeverityId,
+    CognitiveComplexityHighlighting.SeverityId,
     CompoundItemName: null,
     Group: HighlightingGroupIds.CodeSmell,
-    Title: WarningHighlighting.Message,
-    Description: WarningHighlighting.Description,
+    Title: CognitiveComplexityHighlighting.Message,
+    Description: CognitiveComplexityHighlighting.Description,
     DefaultSeverity: Severity.WARNING)]
 
 namespace ReSharperPlugin.CognitiveComplexity
@@ -22,16 +22,16 @@ namespace ReSharperPlugin.CognitiveComplexity
         OverlapResolve = OverlapResolveKind.ERROR,
         OverloadResolvePriority = 0,
         ToolTipFormatString = ToolTipFormatString)]
-    public class WarningHighlighting : IHighlighting
+    public class CognitiveComplexityHighlighting : IHighlighting
     {
-        public const string SeverityId = nameof(WarningHighlighting);
+        public const string SeverityId = "CognitiveComplexity";
         public const string Message = "Element exceeds Cognitive Complexity threshold";
         public const string Description = "The cognitive complexity of the code element exceeds the configured threshold. " +
                                           "You can configure the thresholds in the Cognitive Complexity options page.";
 
         public const string ToolTipFormatString = Message + " ({0}%)";
         
-        public WarningHighlighting(ICSharpFunctionDeclaration declaration, int complexityPercentage)
+        public CognitiveComplexityHighlighting(ICSharpFunctionDeclaration declaration, int complexityPercentage)
         {
             Declaration = declaration;
             ComplexityPercentage = complexityPercentage;

@@ -17,7 +17,7 @@ namespace ReSharperPlugin.CognitiveComplexity.Tests
             IPsiSourceFile sourceFile,
             IContextBoundSettingsStore settingsStore)
         {
-            return highlighting is WarningHighlighting;
+            return highlighting is CognitiveComplexityHighlighting;
         }
 
         [Test] public void TestConditionTest() { DoNamedTest2(); }
