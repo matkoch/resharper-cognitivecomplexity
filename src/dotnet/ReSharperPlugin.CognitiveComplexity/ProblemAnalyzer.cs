@@ -152,12 +152,15 @@ namespace ReSharperPlugin.CognitiveComplexity
 
             var store = data.SettingsStore;
             var baseThreshold = store.GetValue((CognitiveComplexityAnalysisSettings s) => s.CSharpThreshold);
+            var complexityPercentage = (int) (elementProcessor.ComplexityScore * 100.0 / baseThreshold);
+            if (complexityPercentage > 100)
+                consumer.AddHighlighting(new CognitiveComplexityHighlighting(element, complexityPercentage));
+            
+#if RIDER
             var lowThreshold = store.GetValue((CognitiveComplexityAnalysisSettings s) => s.LowComplexityThreshold);
             var middleThreshold = store.GetValue((CognitiveComplexityAnalysisSettings s) => s.MiddleComplexityThreshold);
             var highThreshold = store.GetValue((CognitiveComplexityAnalysisSettings s) => s.HighComplexityThreshold);
 
-            var complexityPercentage = (int) (elementProcessor.ComplexityScore * 100.0 / baseThreshold);
-            
             string codeLensText;
             IconId iconId;
 
@@ -184,10 +187,6 @@ namespace ReSharperPlugin.CognitiveComplexity
                 codeLensText = string.Empty;
             }
 
-            if (complexityPercentage > 100)
-                consumer.AddHighlighting(new CognitiveComplexityHighlighting(element, complexityPercentage));
-            
-#if RIDER
             var moreText =
                 $"Cognitive complexity value of {elementProcessor.ComplexityScore} " +
                 $"({complexityPercentage}% of threshold {baseThreshold})";

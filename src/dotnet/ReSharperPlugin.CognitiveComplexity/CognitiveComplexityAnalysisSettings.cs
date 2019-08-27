@@ -1,13 +1,17 @@
 using JetBrains.Application.Settings;
 using JetBrains.ReSharper.Resources.Settings;
 
-namespace ReSharperPlugin.CognitiveComplexity.Options
+namespace ReSharperPlugin.CognitiveComplexity
 {
     [SettingsKey(typeof (CodeInspectionSettings), "Cognitive complexity analysis")]
     public class CognitiveComplexityAnalysisSettings
     {
         public const int DefaultThreshold = 10;
+        
+        [SettingsEntry(DefaultThreshold, "CSharp Threshold")]
+        public int CSharpThreshold;
 
+#if RIDER
         [SettingsEntry(80, "Mildly complex")]
         public int LowComplexityThreshold { get; set; }
         
@@ -16,8 +20,6 @@ namespace ReSharperPlugin.CognitiveComplexity.Options
         
         [SettingsEntry(150, "Refactor me?")]
         public int HighComplexityThreshold { get; set; }
-
-        [SettingsEntry(DefaultThreshold, "CSharp Threshold")]
-        public int CSharpThreshold;
+#endif
     }
 }

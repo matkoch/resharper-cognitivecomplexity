@@ -73,6 +73,7 @@ namespace ReSharperPlugin.CognitiveComplexity.Options
 //
 //            AddControl(treeGrid, isStar: true);
             
+#if RIDER
             AddText("CodeVision thresholds (in %):");
 
             var lowComplexity = CreateComplexity("low", s => s.LowComplexityThreshold);
@@ -85,6 +86,7 @@ namespace ReSharperPlugin.CognitiveComplexity.Options
                 AddControl(middleComplexity.Spinner.WithDescription("Mildly complex:", lifetime));
                 AddControl(highComplexity.Spinner.WithDescription("Very complex:", lifetime));
             }
+#endif
         }
 
         private static string GetPresentableName(PsiLanguageType psiLanguageType)
