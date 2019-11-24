@@ -50,43 +50,17 @@ compileKotlin {
     kotlinOptions { jvmTarget = "1.8" }
 }
 
-task findMsBuild {
-    doLast {
-        ByteArrayOutputStream stdout = new ByteArrayOutputStream()
-        if (isWindows) {
-            exec {
-                executable "${rootDir}\\tools\\vswhere.exe"
-                args '-latest','-property','installationPath'
-                standardOutput = stdout
-                workingDir project.rootDir
-            }
-            List<String> files = new FileNameFinder().getFileNames("${stdout.toString().trim()}\\MSBuild", "**/MSBuild.exe")
-            ext.executable = files.get(0)
-        } else {
-            exec {
-                executable 'which'
-                args 'msbuild'
-                standardOutput = stdout
-                workingDir rootDir
-            }
-            ext.executable = stdout.toString().trim()
-        }
-    }
-}
-
 task compileDotNet {
-    dependsOn findMsBuild
     doLast {
         exec {
-            executable findMsBuild.executable
-            args "/t:Restore;Rebuild","${DotnetSolution}","/v:minimal","/p:Configuration=${BuildConfiguration}"
+            executable "dotnet"
+            args "msbuild","/t:Restore;Rebuild","${DotnetSolution}","/p:Configuration=${BuildConfiguration}"
             workingDir rootDir
         }
     }
 }
 
 buildPlugin {
-    dependsOn findMsBuild
     outputs.upToDateWhen { false }
     doLast {
         copy {
@@ -101,8 +75,8 @@ buildPlugin {
         }.take(1).join("")
 
         exec {
-            executable findMsBuild.executable
-            args "/t:Pack","${DotnetSolution}","/v:minimal","/p:Configuration=${BuildConfiguration}","/p:PackageOutputPath=${rootDir}/output","/p:PackageReleaseNotes=${changeNotes}","/p:PackageVersion=${version}"
+            executable "dotnet"
+            args "msbuild","/t:Pack","${DotnetSolution}","/p:Configuration=${BuildConfiguration}","/p:PackageOutputPath=${rootDir}/output","/p:PackageReleaseNotes=${changeNotes}","/p:PackageVersion=${version}"
         }
     }
 }
