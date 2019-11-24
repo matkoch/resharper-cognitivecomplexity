@@ -22,7 +22,7 @@
   </ItemGroup>
   
   <ItemGroup>
-    <Compile Remove="CodeInsightsHighlighting.cs" />
+    <Compile Remove="Rider\**\*.cs" />
   </ItemGroup>
   
   <ItemGroup>

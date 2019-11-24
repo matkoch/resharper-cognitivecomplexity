@@ -3,6 +3,7 @@ using JetBrains.ReSharper.Feature.Services.Daemon;
 using JetBrains.ReSharper.Psi.CSharp;
 using JetBrains.ReSharper.Psi.CSharp.Tree;
 using JetBrains.ReSharper.Psi.Tree;
+using JetBrains.TextControl.DocumentMarkup;
 using JetBrains.Util;
 using ReSharperPlugin.CognitiveComplexity;
 
@@ -26,11 +27,13 @@ namespace ReSharperPlugin.CognitiveComplexity
     {
         public const string SeverityId = "CognitiveComplexity";
         public const string Message = "Element exceeds Cognitive Complexity threshold";
-        public const string Description = "The cognitive complexity of the code element exceeds the configured threshold. " +
-                                          "You can configure the thresholds in the Cognitive Complexity options page.";
+
+        public const string Description =
+            "The cognitive complexity of the code element exceeds the configured threshold. " +
+            "You can configure the thresholds in the Cognitive Complexity options page.";
 
         public const string ToolTipFormatString = Message + " ({0}%)";
-        
+
         public CognitiveComplexityHighlighting(ICSharpFunctionDeclaration declaration, int complexityPercentage)
         {
             Declaration = declaration;
@@ -51,7 +54,7 @@ namespace ReSharperPlugin.CognitiveComplexity
         }
 
         public string ToolTip => string.Format(ToolTipFormatString, ComplexityPercentage);
-        
+
         public string ErrorStripeToolTip
             => Declaration.DeclaredName;
     }
