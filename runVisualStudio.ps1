@@ -1,5 +1,5 @@
 Param(
-    $RootSuffix = "SamplePlugin",
+    $RootSuffix = "CognitiveComplexity",
     $Version = "1.0.0"
 )
 

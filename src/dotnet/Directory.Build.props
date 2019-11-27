@@ -1,10 +1,11 @@
 <Project>
-  
+
   <PropertyGroup>
+    <LangVersion>latest</LangVersion>
     <NoPackageAnalysis>true</NoPackageAnalysis>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>None</ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
-    
+
     <BaseIntermediateOutputPath>obj\$(MSBuildProjectName)\</BaseIntermediateOutputPath>
     <DefaultItemExcludes>$(DefaultItemExcludes);obj\**</DefaultItemExcludes>
     <OutputPath>bin\$(MSBuildProjectName)\$(Configuration)\</OutputPath>
@@ -24,5 +25,5 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0-preview.2" PrivateAssets="All" />
   </ItemGroup>
-  
+
 </Project>
