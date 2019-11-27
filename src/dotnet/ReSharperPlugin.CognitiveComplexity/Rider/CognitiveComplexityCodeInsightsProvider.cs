@@ -10,7 +10,7 @@ namespace ReSharperPlugin.CognitiveComplexity.Rider
     [SolutionComponent]
     public class CognitiveComplexityCodeInsightsProvider : ICodeInsightsProvider
     {
-        public static bool ShowIndicators = true;
+        public static bool ShowIndicators;
 
         private readonly IPsiServices _services;
 
