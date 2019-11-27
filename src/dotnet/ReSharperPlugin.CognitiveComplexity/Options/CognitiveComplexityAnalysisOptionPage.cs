@@ -39,9 +39,9 @@ namespace ReSharperPlugin.CognitiveComplexity.Options
                 optionsSettingsSmartContext.SetBinding(lifetime, setting, property);
                 return (property, property.GetBeSpinner(lifetime));
             }
-            
+
             AddText("Language specific thresholds:");
-            
+
             var csharpComplexity = CreateComplexity("csharp", s => s.CSharpThreshold);
 
             using (Indent())
@@ -72,7 +72,7 @@ namespace ReSharperPlugin.CognitiveComplexity.Options
 //                new TreeConfiguration(new[] {"Language,*", "Threshold,auto"}));
 //
 //            AddControl(treeGrid, isStar: true);
-            
+
 #if RIDER
             AddText("CodeVision thresholds (in %):");
 
@@ -87,16 +87,6 @@ namespace ReSharperPlugin.CognitiveComplexity.Options
                 AddControl(highComplexity.Spinner.WithDescription("Very complex:", lifetime));
             }
 #endif
-        }
-
-        private static string GetPresentableName(PsiLanguageType psiLanguageType)
-        {
-            // Bah, WinRT JS is a different language, that supports control flow,
-            // but has the same presentable name as normal JS. I don't like
-            // adding language specific fixes...
-            if (psiLanguageType is JavaScriptWinRTLanguage)
-                return "JavaScript (WinRT)";
-            return psiLanguageType.PresentableName;
         }
     }
 }
