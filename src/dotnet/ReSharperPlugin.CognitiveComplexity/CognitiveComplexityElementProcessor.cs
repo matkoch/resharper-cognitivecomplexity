@@ -109,8 +109,10 @@ namespace ReSharperPlugin.CognitiveComplexity
                 case ICSharpStatement statement:
                 {
                     var elseStatement = IfStatementNavigator.GetByElse(statement);
-                    if (elseStatement != null)
-                        IncreaseComplexity(elseStatement.Else);
+                    if (statement is IIfStatement ifStatement)
+                        IncreaseComplexity(ifStatement.RPar);
+                    else if (elseStatement != null)
+                        IncreaseComplexity(elseStatement.ElseKeyword);
                     return;
                 }
                 case ILambdaExpression _:
