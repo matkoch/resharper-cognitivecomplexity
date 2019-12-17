@@ -1,10 +1,14 @@
+using System.Collections.Generic;
+using JetBrains.DocumentModel;
 using JetBrains.ReSharper.Feature.Services.Daemon;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.CSharp.Tree;
 using JetBrains.ReSharper.Psi.CSharp.Util;
 using JetBrains.ReSharper.Psi.Tree;
 #if RIDER
+using System.Numerics;
 using ReSharperPlugin.CognitiveComplexity.Rider;
+
 #endif
 
 namespace ReSharperPlugin.CognitiveComplexity
@@ -12,19 +16,24 @@ namespace ReSharperPlugin.CognitiveComplexity
     internal class CognitiveComplexityElementProcessor : IRecursiveElementProcessor
     {
         private readonly ICSharpFunctionDeclaration _element;
-        private readonly IHighlightingConsumer _consumer;
 
         private int _nesting;
 
-        public CognitiveComplexityElementProcessor(
-            ICSharpFunctionDeclaration element,
-            IHighlightingConsumer consumer)
+        public CognitiveComplexityElementProcessor(ICSharpFunctionDeclaration element)
         {
             _element = element;
-            _consumer = consumer;
+
+#if RIDER
+            if (CognitiveComplexityCodeInsightsProvider.ShowIndicators)
+            {
+                Complexities = new List<(ITreeNode Node, DocumentOffset offset, int complexity)>();
+            }
+#endif
         }
 
         public int ComplexityScore { get; private set; }
+
+        public List<(ITreeNode Node, DocumentOffset offset, int complexity)> Complexities { get; private set; }
 
         public bool ProcessingIsFinished => false;
 
@@ -38,16 +47,8 @@ namespace ReSharperPlugin.CognitiveComplexity
             void IncreaseComplexity(ITreeNode token = null, int i = 1)
             {
                 ComplexityScore += i;
-
 #if RIDER
-                if (CognitiveComplexityCodeInsightsProvider.ShowIndicators)
-                {
-                    _consumer.AddHighlighting(
-                        new CognitiveComplexityHint(
-                            element,
-                            (token ?? element).GetDocumentRange().EndOffset,
-                            i));
-                }
+                Complexities?.Add((element, (token ?? element).GetDocumentRange().EndOffset, i));
 #endif
             }
 

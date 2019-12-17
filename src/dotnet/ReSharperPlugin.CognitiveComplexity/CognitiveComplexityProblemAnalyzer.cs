@@ -1,14 +1,16 @@
+using System;
+using System.Linq;
 using JetBrains.Application.Settings;
 using JetBrains.ReSharper.Feature.Services.Daemon;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.CSharp.Tree;
 using JetBrains.ReSharper.Psi.Tree;
-
 #if RIDER
 using JetBrains.ReSharper.Daemon.CodeInsights;
 using JetBrains.ReSharper.Host.Platform.Icons;
 using JetBrains.UI.Icons;
 using ReSharperPlugin.CognitiveComplexity.Rider;
+
 #endif
 
 namespace ReSharperPlugin.CognitiveComplexity
@@ -20,7 +22,9 @@ namespace ReSharperPlugin.CognitiveComplexity
         {
             typeof(CognitiveComplexityHighlighting),
 #if RIDER
-            typeof(CognitiveComplexityHint),
+            typeof(CognitiveComplexityInfoHint),
+            typeof(CognitiveComplexityWarningHint),
+            typeof(CognitiveComplexityErrorHint)
 #endif
         })]
     public class CognitiveComplexityProblemAnalyzer : ElementProblemAnalyzer<ICSharpFunctionDeclaration>
@@ -46,9 +50,7 @@ namespace ReSharperPlugin.CognitiveComplexity
             if (element.Body == null)
                 return;
 
-            var elementProcessor = new CognitiveComplexityElementProcessor(
-                element,
-                consumer);
+            var elementProcessor = new CognitiveComplexityElementProcessor(element);
             element.Body.ProcessDescendants(elementProcessor);
 
             var store = data.SettingsStore;
@@ -102,6 +104,27 @@ namespace ReSharperPlugin.CognitiveComplexity
                     element.DeclaredElement,
                     _iconHost.Transform(iconId))
             );
+
+            if (elementProcessor.Complexities != null)
+            {
+                var min = int.MaxValue;
+                var max = int.MinValue;
+                foreach (var (_, _, complexity) in elementProcessor.Complexities)
+                {
+                    min = Math.Min(min, complexity);
+                    max = Math.Max(max, complexity);
+                }
+
+                foreach (var (node, offset, complexity) in elementProcessor.Complexities)
+                {
+                    if (complexityPercentage >= highThreshold && complexity == max)
+                        consumer.AddHighlighting(new CognitiveComplexityErrorHint(node, offset, complexity));
+                    else if (complexityPercentage >= middleThreshold && complexity >= min + (max - min) / 2)
+                        consumer.AddHighlighting(new CognitiveComplexityWarningHint(node, offset, complexity));
+                    else
+                        consumer.AddHighlighting(new CognitiveComplexityInfoHint(node, offset, complexity));
+                }
+            }
 #endif
         }
     }

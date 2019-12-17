@@ -8,7 +8,7 @@ namespace ReSharperPlugin.CognitiveComplexity.Rider
     {
         public IIntraTextAdornmentDataModel CreateDataModel(IHighlighter highlighter)
         {
-            return highlighter.UserData is CognitiveComplexityHint hint
+            return highlighter.UserData is CognitiveComplexityHintBase hint
                 ? new CognitiveComplexityAdornmentDataModel(hint.Value)
                 : null;
         }
