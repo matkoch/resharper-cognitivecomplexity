@@ -20,7 +20,8 @@ namespace ReSharperPlugin.CognitiveComplexity
         typeof(ICSharpFunctionDeclaration),
         HighlightingTypes = new[]
         {
-            typeof(CognitiveComplexityHighlighting),
+            typeof(CognitiveComplexityInfoHighlighting),
+            typeof(CognitiveComplexityErrorHighlighting),
 #if RIDER
             typeof(CognitiveComplexityInfoHint),
             typeof(CognitiveComplexityWarningHint),
@@ -57,7 +58,19 @@ namespace ReSharperPlugin.CognitiveComplexity
             var baseThreshold = store.GetValue((CognitiveComplexityAnalysisSettings s) => s.CSharpThreshold);
             var complexityPercentage = (int) (elementProcessor.ComplexityScore * 100.0 / baseThreshold);
             if (complexityPercentage > 100)
-                consumer.AddHighlighting(new CognitiveComplexityHighlighting(element, complexityPercentage));
+            {
+                consumer.AddHighlighting(new CognitiveComplexityErrorHighlighting(
+                    element,
+                    elementProcessor.ComplexityScore - baseThreshold,
+                    complexityPercentage));
+            }
+            else
+            {
+                consumer.AddHighlighting(new CognitiveComplexityInfoHighlighting(
+                    element,
+                    elementProcessor.ComplexityScore,
+                    complexityPercentage));
+            }
 
 #if RIDER
             var lowThreshold = store.GetValue((CognitiveComplexityAnalysisSettings s) => s.LowComplexityThreshold);

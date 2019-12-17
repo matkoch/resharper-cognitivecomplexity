@@ -2,17 +2,14 @@ using JetBrains.DocumentModel;
 using JetBrains.ReSharper.Feature.Services.Daemon;
 using JetBrains.ReSharper.Psi.CSharp;
 using JetBrains.ReSharper.Psi.CSharp.Tree;
-using JetBrains.ReSharper.Psi.Tree;
-using JetBrains.TextControl.DocumentMarkup;
-using JetBrains.Util;
 using ReSharperPlugin.CognitiveComplexity;
 
 [assembly: RegisterConfigurableSeverity(
-    CognitiveComplexityHighlighting.SeverityId,
+    CognitiveComplexityErrorHighlighting.SeverityId,
     CompoundItemName: null,
     Group: HighlightingGroupIds.CodeSmell,
-    Title: CognitiveComplexityHighlighting.Message,
-    Description: CognitiveComplexityHighlighting.Description,
+    Title: CognitiveComplexityErrorHighlighting.Message,
+    Description: CognitiveComplexityErrorHighlighting.Description,
     DefaultSeverity: Severity.WARNING)]
 
 namespace ReSharperPlugin.CognitiveComplexity
@@ -23,7 +20,7 @@ namespace ReSharperPlugin.CognitiveComplexity
         OverlapResolve = OverlapResolveKind.ERROR,
         OverloadResolvePriority = 0,
         ToolTipFormatString = ToolTipFormatString)]
-    public class CognitiveComplexityHighlighting : IHighlighting
+    public class CognitiveComplexityErrorHighlighting : IHighlighting
     {
         public const string SeverityId = "CognitiveComplexity";
         public const string Message = "Element exceeds Cognitive Complexity threshold";
@@ -32,15 +29,20 @@ namespace ReSharperPlugin.CognitiveComplexity
             "The cognitive complexity of the code element exceeds the configured threshold. " +
             "You can configure the thresholds in the Cognitive Complexity options page.";
 
-        public const string ToolTipFormatString = Message + " ({0}%)";
+        public const string ToolTipFormatString = Message + " by {0} ({1}%)";
 
-        public CognitiveComplexityHighlighting(ICSharpFunctionDeclaration declaration, int complexityPercentage)
+        public CognitiveComplexityErrorHighlighting(
+            ICSharpFunctionDeclaration declaration,
+            int complexityDelta,
+            int complexityPercentage)
         {
             Declaration = declaration;
+            ComplexityDelta = complexityDelta;
             ComplexityPercentage = complexityPercentage;
         }
 
         public ICSharpFunctionDeclaration Declaration { get; }
+        public int ComplexityDelta { get; }
         public int ComplexityPercentage { get; }
 
         public bool IsValid()
@@ -53,9 +55,8 @@ namespace ReSharperPlugin.CognitiveComplexity
             return Declaration.NameIdentifier?.GetHighlightingRange() ?? DocumentRange.InvalidRange;
         }
 
-        public string ToolTip => string.Format(ToolTipFormatString, ComplexityPercentage);
+        public string ToolTip => string.Format(ToolTipFormatString, ComplexityDelta, ComplexityPercentage);
 
-        public string ErrorStripeToolTip
-            => Declaration.DeclaredName;
+        public string ErrorStripeToolTip => Declaration.DeclaredName;
     }
 }
