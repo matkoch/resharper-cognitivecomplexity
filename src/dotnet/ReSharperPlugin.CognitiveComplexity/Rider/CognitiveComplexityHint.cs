@@ -8,61 +8,30 @@ using JetBrains.UI.RichText;
 using ReSharperPlugin.CognitiveComplexity.Rider;
 using Severity = JetBrains.ReSharper.Feature.Services.Daemon.Severity;
 
-[assembly: RegisterHighlighterGroup(
-    CognitiveComplexityHintBase.HighlightAttributeGroupId,
-    CognitiveComplexityHintBase.HighlightAttributeIdBase,
-    HighlighterGroupPriority.CODE_SETTINGS)]
-
-[assembly: RegisterHighlighter(
-    CognitiveComplexityInfoHint.HighlightAttributeId,
-    GroupId = CognitiveComplexityHintBase.HighlightAttributeGroupId,
-    ForegroundColor = CognitiveComplexityInfoHint.LightForegroundColor,
-    BackgroundColor = CognitiveComplexityInfoHint.LightBackgroundColor,
-    DarkForegroundColor = CognitiveComplexityInfoHint.DarkForegroundColor,
-    DarkBackgroundColor = CognitiveComplexityInfoHint.DarkBackgroundColor,
-    EffectType = EffectType.INTRA_TEXT_ADORNMENT,
-    Layer = 3000,
-    TransmitUpdates = true,
-    VSPriority = 40)]
-
-[assembly: RegisterHighlighter(
-    CognitiveComplexityWarningHint.HighlightAttributeId,
-    GroupId = CognitiveComplexityHintBase.HighlightAttributeGroupId,
-    ForegroundColor = CognitiveComplexityWarningHint.LightForegroundColor,
-    BackgroundColor = CognitiveComplexityWarningHint.LightBackgroundColor,
-    DarkForegroundColor = CognitiveComplexityWarningHint.DarkForegroundColor,
-    DarkBackgroundColor = CognitiveComplexityWarningHint.DarkBackgroundColor,
-    EffectType = EffectType.INTRA_TEXT_ADORNMENT,
-    Layer = 3000,
-    TransmitUpdates = true,
-    VSPriority = 40)]
-
-[assembly: RegisterHighlighter(
-    CognitiveComplexityErrorHint.HighlightAttributeId,
-    GroupId = CognitiveComplexityHintBase.HighlightAttributeGroupId,
-    ForegroundColor = CognitiveComplexityErrorHint.LightForegroundColor,
-    BackgroundColor = CognitiveComplexityErrorHint.LightBackgroundColor,
-    DarkForegroundColor = CognitiveComplexityErrorHint.DarkForegroundColor,
-    DarkBackgroundColor = CognitiveComplexityErrorHint.DarkBackgroundColor,
-    EffectType = EffectType.INTRA_TEXT_ADORNMENT,
-    Layer = 3000,
-    TransmitUpdates = true,
-    VSPriority = 40)]
-
 namespace ReSharperPlugin.CognitiveComplexity.Rider
 {
+    // TODO: extract RegisterHighlighterGroup and RegisterHighlighter to separate class
+    [RegisterHighlighterGroup(
+        CognitiveComplexityHintBase.HighlightAttributeGroupId,
+        CognitiveComplexityHintBase.HighlightAttributeIdBase,
+        HighlighterGroupPriority.CODE_SETTINGS)]
+    [RegisterHighlighter(
+        HighlightAttributeId,
+        GroupId = HighlightAttributeGroupId,
+        ForegroundColor = "#707070",
+        BackgroundColor = "#EBEBEB",
+        DarkForegroundColor = "#787878",
+        DarkBackgroundColor = "#3B3B3C",
+        EffectType = EffectType.INTRA_TEXT_ADORNMENT,
+        Layer = 3000,
+        TransmitUpdates = true,
+        VSPriority = 40)]
     [DaemonIntraTextAdornmentProvider(typeof(CognitiveComplexityAdornmentProvider))]
     [DaemonTooltipProvider(typeof(InlayHintTooltipProvider))]
-    [StaticSeverityHighlighting(Severity.INFO, "CSharpInfo", AttributeId = HighlightAttributeId)]
+    [StaticSeverityHighlighting(Severity.INFO, typeof(HighlightingGroupIds.CodeInsights), AttributeId = HighlightAttributeId)]
     public class CognitiveComplexityInfoHint : CognitiveComplexityHintBase
     {
         public const string HighlightAttributeId = HighlightAttributeIdBase + " Info Hint";
-
-        internal const string DarkBackgroundColor = "#3B3B3C";
-        internal const string DarkForegroundColor = "#787878";
-
-        internal const string LightBackgroundColor = "#EBEBEB";
-        internal const string LightForegroundColor = "#707070";
 
         public CognitiveComplexityInfoHint(ITreeNode node, DocumentOffset offset, int value)
             : base(node, offset, value)
@@ -70,18 +39,23 @@ namespace ReSharperPlugin.CognitiveComplexity.Rider
         }
     }
 
+    [RegisterHighlighter(
+        HighlightAttributeId,
+        GroupId = HighlightAttributeGroupId,
+        ForegroundColor = "#707070",
+        BackgroundColor = "#FFDA00",
+        DarkForegroundColor = "#FFFFFF",
+        DarkBackgroundColor = "#FFCD00",
+        EffectType = EffectType.INTRA_TEXT_ADORNMENT,
+        Layer = 3000,
+        TransmitUpdates = true,
+        VSPriority = 40)]
     [DaemonIntraTextAdornmentProvider(typeof(CognitiveComplexityAdornmentProvider))]
     [DaemonTooltipProvider(typeof(InlayHintTooltipProvider))]
-    [StaticSeverityHighlighting(Severity.INFO, "CSharpInfo", AttributeId = HighlightAttributeId)]
+    [StaticSeverityHighlighting(Severity.INFO, typeof(HighlightingGroupIds.CodeInsights), AttributeId = HighlightAttributeId)]
     public class CognitiveComplexityWarningHint : CognitiveComplexityHintBase
     {
         public const string HighlightAttributeId = HighlightAttributeIdBase + " Warning Hint";
-
-        internal const string DarkBackgroundColor = "#FFCD00";
-        internal const string DarkForegroundColor = "#FFFFFF";
-
-        internal const string LightBackgroundColor = "#FFDA00";
-        internal const string LightForegroundColor = "#707070";
 
         public CognitiveComplexityWarningHint(ITreeNode node, DocumentOffset offset, int value)
             : base(node, offset, value)
@@ -89,18 +63,23 @@ namespace ReSharperPlugin.CognitiveComplexity.Rider
         }
     }
 
+    [RegisterHighlighter(
+        HighlightAttributeId,
+        GroupId = HighlightAttributeGroupId,
+        ForegroundColor = "#F4F4F4",
+        BackgroundColor = "#FF0009",
+        DarkForegroundColor = "#FFFFFF",
+        DarkBackgroundColor = "#CF0000",
+        EffectType = EffectType.INTRA_TEXT_ADORNMENT,
+        Layer = 3000,
+        TransmitUpdates = true,
+        VSPriority = 40)]
     [DaemonIntraTextAdornmentProvider(typeof(CognitiveComplexityAdornmentProvider))]
     [DaemonTooltipProvider(typeof(InlayHintTooltipProvider))]
-    [StaticSeverityHighlighting(Severity.INFO, "CSharpInfo", AttributeId = HighlightAttributeId)]
+    [StaticSeverityHighlighting(Severity.INFO, typeof(HighlightingGroupIds.CodeInsights), AttributeId = HighlightAttributeId)]
     public class CognitiveComplexityErrorHint : CognitiveComplexityHintBase
     {
         public const string HighlightAttributeId = HighlightAttributeIdBase + " Error Hint";
-
-        internal const string DarkBackgroundColor = "#CF0000";
-        internal const string DarkForegroundColor = "#FFFFFF";
-
-        internal const string LightBackgroundColor = "#FF0009";
-        internal const string LightForegroundColor = "#F4F4F4";
 
         public CognitiveComplexityErrorHint(ITreeNode node, DocumentOffset offset, int value)
             : base(node, offset, value)

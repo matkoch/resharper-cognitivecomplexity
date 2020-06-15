@@ -4,14 +4,12 @@ using JetBrains.ReSharper.Psi.CSharp.Tree;
 using JetBrains.TextControl.DocumentMarkup;
 using ReSharperPlugin.CognitiveComplexity;
 
-[assembly: RegisterHighlighter(
-    CognitiveComplexityInfoHighlighting.HighlightAttributeId)]
-
 namespace ReSharperPlugin.CognitiveComplexity
 {
+    [RegisterHighlighter(HighlightAttributeId)]
     [StaticSeverityHighlighting(
         Severity.INFO,
-        HighlightingGroupIds.CodeSmell,
+        typeof(HighlightingGroupIds.CodeSmellStatic),
         AttributeId = HighlightAttributeId)]
     public class CognitiveComplexityInfoHighlighting : IHighlighting
     {

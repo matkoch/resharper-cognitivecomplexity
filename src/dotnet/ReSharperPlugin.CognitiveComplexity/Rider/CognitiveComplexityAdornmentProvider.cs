@@ -6,6 +6,11 @@ namespace ReSharperPlugin.CognitiveComplexity.Rider
     [SolutionComponent]
     public class CognitiveComplexityAdornmentProvider : IHighlighterIntraTextAdornmentProvider
     {
+        public bool IsValid(IHighlighter highlighter)
+        {
+            return highlighter.UserData is CognitiveComplexityHintBase;
+        }
+
         public IIntraTextAdornmentDataModel CreateDataModel(IHighlighter highlighter)
         {
             return highlighter.UserData is CognitiveComplexityHintBase hint

@@ -4,16 +4,15 @@ using JetBrains.ReSharper.Psi.CSharp;
 using JetBrains.ReSharper.Psi.CSharp.Tree;
 using ReSharperPlugin.CognitiveComplexity;
 
-[assembly: RegisterConfigurableSeverity(
-    CognitiveComplexityErrorHighlighting.SeverityId,
-    CompoundItemName: null,
-    Group: HighlightingGroupIds.CodeSmell,
-    Title: CognitiveComplexityErrorHighlighting.Message,
-    Description: CognitiveComplexityErrorHighlighting.Description,
-    DefaultSeverity: Severity.WARNING)]
-
 namespace ReSharperPlugin.CognitiveComplexity
 {
+    [RegisterConfigurableSeverity(
+        SeverityId,
+        CompoundItemName: null,
+        Group: HighlightingGroupIds.CodeSmell,
+        Title: Message,
+        Description: Description,
+        DefaultSeverity: Severity.WARNING)]
     [ConfigurableSeverityHighlighting(
         SeverityId,
         CSharpLanguage.Name,

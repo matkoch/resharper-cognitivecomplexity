@@ -30,5 +30,6 @@ namespace ReSharperPlugin.CognitiveComplexity.Rider
         public TextRange? SelectionRange { get; }
         public IconId IconId { get; }
         public bool IsPreceding { get; }
+        public int Order { get; }
     }
 }
