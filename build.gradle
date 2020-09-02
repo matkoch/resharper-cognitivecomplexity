@@ -38,9 +38,6 @@ wrapper {
 
 version = ext.PluginVersion
 
-if (ext.has("username")) intellij.publish.username = ext.username
-if (ext.has("password")) intellij.publish.password = ext.password
-
 sourceSets {
     main {
         java.srcDir 'src/rider/main/kotlin'
@@ -158,5 +155,17 @@ prepareSandbox {
             def file = file(f)
             if (!file.exists()) throw new RuntimeException("File ${file} does not exist")
         })
+    }
+}
+
+publishPlugin {
+    token = "${PublishToken}"
+
+    doLast {
+        exec {
+            executable "dotnet"
+            args "nuget","push","output/${DotnetPluginId}.${version}.nupkg","--api-key",token,"--source","https://plugins.jetbrains.com"
+            workingDir rootDir
+        }
     }
 }
