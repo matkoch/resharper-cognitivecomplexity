@@ -49,7 +49,7 @@ public class A
         foreach (var c in "") // +1
         {
             if (true) // +2 (N=1)
-                continue; // +1
+                continue;
 
             if (false) // +2 (N=1)
                 break; // +1

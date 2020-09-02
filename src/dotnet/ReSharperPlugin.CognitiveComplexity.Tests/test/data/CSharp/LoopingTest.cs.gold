@@ -49,7 +49,7 @@ public class A
         foreach (var c in "") // +1
         {
             if (true) // +2 (N=1)
-                continue; // +1
+                continue;
 
             if (false) // +2 (N=1)
                 break; // +1
@@ -62,4 +62,4 @@ public class A
 ---------------------------------------------------------
 (0): ReSharper Warning: (T) '16' (E) 'M1'
 (1): ReSharper Warning: (T) '5' (E) 'M2'
-(2): ReSharper Warning: (T) '7' (E) 'M3'
+(2): ReSharper Warning: (T) '6' (E) 'M3'

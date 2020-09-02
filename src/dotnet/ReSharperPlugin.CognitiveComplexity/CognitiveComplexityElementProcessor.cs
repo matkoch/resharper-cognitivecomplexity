@@ -92,9 +92,6 @@ namespace ReSharperPlugin.CognitiveComplexity
                 case IBreakStatement breakStatement:
                     IncreaseComplexity(breakStatement.Semicolon);
                     return;
-                case IContinueStatement continueStatement:
-                    IncreaseComplexity(continueStatement.Semicolon);
-                    return;
                 case ICSharpExpression expression
                     when expression.HasRecursion(_element):
                     IncreaseComplexity();
