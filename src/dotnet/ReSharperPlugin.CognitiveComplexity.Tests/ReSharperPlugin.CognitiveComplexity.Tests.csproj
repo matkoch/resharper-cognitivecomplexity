@@ -6,16 +6,21 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="JetBrains.ReSharper.SDK.Tests" Version="$(SdkVersion)" />
+    <PackageReference Include="JetBrains.Rider.SDK.Tests" Version="$(SdkVersion)" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.1" />
   </ItemGroup>
   
   <ItemGroup>
-    <ProjectReference Include="..\ReSharperPlugin.CognitiveComplexity\ReSharperPlugin.CognitiveComplexity.csproj" />
+    <ProjectReference Include="..\ReSharperPlugin.CognitiveComplexity\ReSharperPlugin.CognitiveComplexity.Rider.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Compile Remove="test/**/*" />
     <None Include="test/**/*" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="mono/*.dll" CopyLocal="true" />
   </ItemGroup>
 
 </Project>
