@@ -26,5 +26,5 @@ public class A
 }
 
 ---------------------------------------------------------
-(0): ReSharper Warning: (T) '2' (E) 'M1'
-(1): ReSharper Warning: (T) '5' (E) 'M2'
+(0): CognitiveComplexityInfoHighlighting: (T) 'Element has a cognitive complexity of 2 (20%)' (E) 'M1'
+(1): CognitiveComplexityInfoHighlighting: (T) 'Element has a cognitive complexity of 5 (50%)' (E) 'M2'
