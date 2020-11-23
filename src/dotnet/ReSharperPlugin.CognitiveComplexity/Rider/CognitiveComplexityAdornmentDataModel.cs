@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using JetBrains.Application.InlayHints;
 using JetBrains.Application.UI.Controls.BulbMenu.Items;
 using JetBrains.Application.UI.Controls.Utils;
 using JetBrains.Application.UI.PopupLayout;
@@ -31,5 +32,6 @@ namespace ReSharperPlugin.CognitiveComplexity.Rider
         public IconId IconId { get; }
         public bool IsPreceding { get; }
         public int Order { get; }
+        public InlayHintsMode InlayHintsMode => InlayHintsMode.Always;
     }
 }
