@@ -1,4 +1,3 @@
-$PSScriptRoot = Split-Path $MyInvocation.MyCommand.Path -Parent
 $PluginId = "ReSharperPlugin.CognitiveComplexity"
 $SolutionPath = "$PSScriptRoot\CognitiveComplexity.sln"
 $SourceBasePath = "$PSScriptRoot\src\dotnet"

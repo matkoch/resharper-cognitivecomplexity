@@ -15,7 +15,7 @@ buildscript {
 plugins {
     id 'java'
     id 'org.jetbrains.kotlin.jvm' version '1.3.61'
-    id 'org.jetbrains.intellij' version '0.4.19' // https://github.com/JetBrains/gradle-intellij-plugin/releases
+    id 'org.jetbrains.intellij' version '0.6.4' // https://github.com/JetBrains/gradle-intellij-plugin/releases
 }
 
 ext {
@@ -49,11 +49,37 @@ compileKotlin {
     kotlinOptions { jvmTarget = "1.8" }
 }
 
-task compileDotNet {
+task setBuildTool {
     doLast {
+        ext.args = []
+        ByteArrayOutputStream stdout = new ByteArrayOutputStream()
+        if (isWindows) {
+            exec {
+                executable "${rootDir}\\tools\\vswhere.exe"
+                args '-latest','-property','installationPath'
+                standardOutput = stdout
+                workingDir rootDir
+            }
+            List<String> files = new FileNameFinder().getFileNames("${stdout.toString().trim()}\\MSBuild", "**/MSBuild.exe")
+            ext.executable = files.get(0)
+        } else {
+            ext.executable = "dotnet"
+            ext.args << "msbuild"
+        }
+        ext.args << "${DotnetSolution}"
+        ext.args << "/p:Configuration=${BuildConfiguration}"
+        ext.args << "/p:HostFullIdentifier="
+    }
+}
+
+task compileDotNet {
+    dependsOn setBuildTool
+    doLast {
+        def arguments = setBuildTool.args.clone()
+        arguments << "/t:Restore;Rebuild"
         exec {
-            executable "dotnet"
-            args "msbuild","/t:Restore;Rebuild","${DotnetSolution}","/p:Configuration=${BuildConfiguration}","/p:HostFullIdentifier="
+            executable setBuildTool.executable
+            args arguments
             workingDir rootDir
         }
     }
@@ -73,9 +99,15 @@ buildPlugin {
             it[1].replaceAll(/(?s)- /, "\u2022 ").replaceAll(/`/, "").replaceAll(/,/, "%2C")
         }.take(1).join("")
 
+        def arguments = setBuildTool.args.clone()
+        arguments << "/t:Pack"
+        arguments << "/p:PackageOutputPath=${rootDir}/output"
+        arguments << "/p:PackageReleaseNotes=${changeNotes}"
+        arguments << "/p:PackageVersion=${version}"
         exec {
-            executable "dotnet"
-            args "msbuild","/t:Pack","${DotnetSolution}","/p:Configuration=${BuildConfiguration}","/p:HostFullIdentifier=","/p:PackageOutputPath=${rootDir}/output","/p:PackageReleaseNotes=${changeNotes}","/p:PackageVersion=${version}"
+            executable setBuildTool.executable
+            args arguments
+            workingDir rootDir
         }
     }
 }
@@ -159,6 +191,8 @@ prepareSandbox {
 }
 
 publishPlugin {
+    dependsOn buildPlugin
+
     token = "${PublishToken}"
     channels(!version.contains("-") ? 'Stable' : 'EAP')
 
