@@ -56,7 +56,7 @@ task setBuildTool {
         if (isWindows) {
             exec {
                 executable "${rootDir}\\tools\\vswhere.exe"
-                args '-latest','-property','installationPath'
+                args '-latest','-property','installationPath','-products','*'
                 standardOutput = stdout
                 workingDir rootDir
             }
