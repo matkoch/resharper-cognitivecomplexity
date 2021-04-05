@@ -87,7 +87,6 @@ task compileDotNet {
 }
 
 buildPlugin {
-    outputs.upToDateWhen { false }
     doLast {
         copy {
             from "${buildDir}/distributions/${rootProject.name}-${version}.zip"
@@ -97,7 +96,7 @@ buildPlugin {
         def changelogText = file("${rootDir}/CHANGELOG.md").text
         def changelogMatches = changelogText =~ /(?s)(-.+?)(?=##|$)/
         def changeNotes = changelogMatches.collect {
-            it[1].replaceAll(/(?s)- /, "\u2022 ").replaceAll(/`/, "").replaceAll(/,/, "%2C")
+            it[1].replaceAll(/(?s)- /, "\u2022 ").replaceAll(/`/, "").replaceAll(/,/, "%2C").replaceAll(/;/, "%3B")
         }.take(1).join("")
 
         def arguments = setBuildTool.args.clone()
@@ -193,6 +192,7 @@ prepareSandbox {
 
 publishPlugin {
     dependsOn buildPlugin
+
     token = "${PublishToken}"
 
     doLast {
