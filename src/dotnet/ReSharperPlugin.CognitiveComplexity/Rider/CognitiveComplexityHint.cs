@@ -1,11 +1,12 @@
+using System;
 using JetBrains.DocumentModel;
 using JetBrains.ReSharper.Daemon;
 using JetBrains.ReSharper.Feature.Services.Daemon;
 using JetBrains.ReSharper.Feature.Services.InlayHints;
+using JetBrains.ReSharper.Psi.CSharp.Tree;
 using JetBrains.ReSharper.Psi.Tree;
 using JetBrains.TextControl.DocumentMarkup;
 using JetBrains.UI.RichText;
-using ReSharperPlugin.CognitiveComplexity.Rider;
 using Severity = JetBrains.ReSharper.Feature.Services.Daemon.Severity;
 
 namespace ReSharperPlugin.CognitiveComplexity.Rider
@@ -100,6 +101,23 @@ namespace ReSharperPlugin.CognitiveComplexity.Rider
             _node = node;
             _offset = offset;
             Value = value;
+            Description = node switch
+            {
+                IWhileStatement _ => "While-Statement (increases nesting)",
+                ISwitchStatement _ => "Switch-Statement (increases nesting)",
+                IDoStatement _ => "Do-While-Statement (increases nesting)",
+                IIfStatement _ => "If-Statement (increases nesting)",
+                IForStatement _ => "For-Statement (increases nesting)",
+                IForeachStatement _ => "Foreach-Statement (increases nesting)",
+                ICatchClause _ => "Catch-Clause (increases nesting)",
+                IGotoStatement _ => "Goto-Statement",
+                IBreakStatement _ => "Break-Statement",
+                IConditionalOrExpression _ => "First/alternating conditional Expression",
+                IConditionalAndExpression _ => "First/alternating conditional Expression",
+                ICSharpStatement _ => "If-Statement (increases nesting)",
+                ICSharpExpression _ => "Recursive Expression",
+                _ => throw new NotSupportedException(node.GetType().FullName)
+            };
         }
 
         public int Value { get; }
@@ -114,8 +132,8 @@ namespace ReSharperPlugin.CognitiveComplexity.Rider
             return new DocumentRange(_offset);
         }
 
-        public string ToolTip { get; } = nameof(ToolTip);
-        public string ErrorStripeToolTip { get; } = nameof(ErrorStripeToolTip);
-        public RichText Description { get; } = nameof(Description);
+        public string ToolTip { get; }
+        public string ErrorStripeToolTip { get; }
+        public RichText Description { get; }
     }
 }
