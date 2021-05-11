@@ -115,7 +115,7 @@ namespace ReSharperPlugin.CognitiveComplexity.Rider
                 IConditionalOrExpression _ => "First/alternating conditional Expression",
                 IConditionalAndExpression _ => "First/alternating conditional Expression",
                 ICSharpStatement _ => "If-Statement (increases nesting)",
-                ICSharpExpression _ => "Recursive Expression",
+                ICSharpExpression _ => "Recursive Call",
                 _ => throw new NotSupportedException(node.GetType().FullName)
             };
         }
