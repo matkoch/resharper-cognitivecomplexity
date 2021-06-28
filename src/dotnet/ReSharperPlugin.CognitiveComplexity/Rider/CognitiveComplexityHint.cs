@@ -24,7 +24,7 @@ namespace ReSharperPlugin.CognitiveComplexity.Rider
         DarkForegroundColor = "#787878",
         DarkBackgroundColor = "#3B3B3C",
         EffectType = EffectType.INTRA_TEXT_ADORNMENT,
-        Layer = 3000,
+        Layer = HighlighterLayer.ADDITIONAL_SYNTAX,
         TransmitUpdates = true,
         VSPriority = 40)]
     [DaemonIntraTextAdornmentProvider(typeof(CognitiveComplexityAdornmentProvider))]
@@ -48,7 +48,7 @@ namespace ReSharperPlugin.CognitiveComplexity.Rider
         DarkForegroundColor = "#FFFFFF",
         DarkBackgroundColor = "#FFCD00",
         EffectType = EffectType.INTRA_TEXT_ADORNMENT,
-        Layer = 3000,
+        Layer = HighlighterLayer.ADDITIONAL_SYNTAX,
         TransmitUpdates = true,
         VSPriority = 40)]
     [DaemonIntraTextAdornmentProvider(typeof(CognitiveComplexityAdornmentProvider))]
@@ -72,7 +72,7 @@ namespace ReSharperPlugin.CognitiveComplexity.Rider
         DarkForegroundColor = "#FFFFFF",
         DarkBackgroundColor = "#CF0000",
         EffectType = EffectType.INTRA_TEXT_ADORNMENT,
-        Layer = 3000,
+        Layer = HighlighterLayer.ADDITIONAL_SYNTAX,
         TransmitUpdates = true,
         VSPriority = 40)]
     [DaemonIntraTextAdornmentProvider(typeof(CognitiveComplexityAdornmentProvider))]

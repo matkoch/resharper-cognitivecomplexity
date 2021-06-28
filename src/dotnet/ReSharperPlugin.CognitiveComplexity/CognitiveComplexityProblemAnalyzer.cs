@@ -7,7 +7,7 @@ using JetBrains.ReSharper.Psi.CSharp.Tree;
 using JetBrains.ReSharper.Psi.Tree;
 #if RIDER
 using JetBrains.ReSharper.Daemon.CodeInsights;
-using JetBrains.ReSharper.Host.Platform.Icons;
+using JetBrains.Rider.Backend.Platform.Icons;
 using JetBrains.UI.Icons;
 using ReSharperPlugin.CognitiveComplexity.Rider;
 
