@@ -12,7 +12,7 @@
 
   <description>
 <![CDATA[
-<p>This plugin implements live calculation of the <b>Cognitive Complexity</b> metric, which was proposed by G. Ann Campbell in <a href="https://www.sonarsource.com/docs/CognitiveComplexity.pdf">Cognitive Complexity - A new way of measuring understandability</a> (c) SonarSource S.A. 2016-2018, Switzerland.
+<p>Implements live calculation of the <b>Cognitive Complexity</b> metric, which was proposed by G. Ann Campbell in <a href="https://www.sonarsource.com/docs/CognitiveComplexity.pdf">Cognitive Complexity - A new way of measuring understandability</a> (c) SonarSource S.A. 2016-2018, Switzerland.
 </p>
 ]]>
   </description>
