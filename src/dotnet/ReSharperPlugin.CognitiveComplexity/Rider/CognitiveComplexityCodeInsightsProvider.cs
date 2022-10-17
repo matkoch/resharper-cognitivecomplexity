@@ -24,17 +24,17 @@ namespace ReSharperPlugin.CognitiveComplexity.Rider
             return true;
         }
 
-        public void OnClick(CodeInsightsHighlighting highlighting, ISolution solution)
+        public void OnClick(CodeInsightHighlightInfo highlightInfo, ISolution solution)
         {
             ShowIndicators = !ShowIndicators;
             using (WriteLockCookie.Create())
             {
-                var sourceFile = highlighting.Range.Document.GetPsiSourceFile(solution);
+                var sourceFile = highlightInfo.CodeInsightsHighlighting.Range.Document.GetPsiSourceFile(solution);
                 _services.MarkAsDirty(sourceFile.ToProjectFile());
             }
         }
 
-        public void OnExtraActionClick(CodeInsightsHighlighting highlighting, string actionId, ISolution solution)
+        public void OnExtraActionClick(CodeInsightHighlightInfo highlightInfo, string actionId, ISolution solution)
         {
         }
 

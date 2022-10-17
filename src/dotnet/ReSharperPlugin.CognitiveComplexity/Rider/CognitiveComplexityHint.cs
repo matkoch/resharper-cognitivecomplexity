@@ -25,8 +25,7 @@ namespace ReSharperPlugin.CognitiveComplexity.Rider
         DarkBackgroundColor = "#3B3B3C",
         EffectType = EffectType.INTRA_TEXT_ADORNMENT,
         Layer = HighlighterLayer.ADDITIONAL_SYNTAX,
-        TransmitUpdates = true,
-        VSPriority = 40)]
+        TransmitUpdates = true)]
     [DaemonIntraTextAdornmentProvider(typeof(CognitiveComplexityAdornmentProvider))]
     [DaemonTooltipProvider(typeof(InlayHintTooltipProvider))]
     [StaticSeverityHighlighting(Severity.INFO, typeof(HighlightingGroupIds.CodeInsights), AttributeId = HighlightAttributeId)]
@@ -49,8 +48,7 @@ namespace ReSharperPlugin.CognitiveComplexity.Rider
         DarkBackgroundColor = "#FFCD00",
         EffectType = EffectType.INTRA_TEXT_ADORNMENT,
         Layer = HighlighterLayer.ADDITIONAL_SYNTAX,
-        TransmitUpdates = true,
-        VSPriority = 40)]
+        TransmitUpdates = true)]
     [DaemonIntraTextAdornmentProvider(typeof(CognitiveComplexityAdornmentProvider))]
     [DaemonTooltipProvider(typeof(InlayHintTooltipProvider))]
     [StaticSeverityHighlighting(Severity.INFO, typeof(HighlightingGroupIds.CodeInsights), AttributeId = HighlightAttributeId)]
@@ -73,8 +71,7 @@ namespace ReSharperPlugin.CognitiveComplexity.Rider
         DarkBackgroundColor = "#CF0000",
         EffectType = EffectType.INTRA_TEXT_ADORNMENT,
         Layer = HighlighterLayer.ADDITIONAL_SYNTAX,
-        TransmitUpdates = true,
-        VSPriority = 40)]
+        TransmitUpdates = true)]
     [DaemonIntraTextAdornmentProvider(typeof(CognitiveComplexityAdornmentProvider))]
     [DaemonTooltipProvider(typeof(InlayHintTooltipProvider))]
     [StaticSeverityHighlighting(Severity.INFO, typeof(HighlightingGroupIds.CodeInsights), AttributeId = HighlightAttributeId)]

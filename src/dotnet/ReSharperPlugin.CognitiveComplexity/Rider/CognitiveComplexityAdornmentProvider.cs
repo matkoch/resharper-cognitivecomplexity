@@ -1,5 +1,6 @@
 using JetBrains.ProjectModel;
 using JetBrains.TextControl.DocumentMarkup;
+using JetBrains.TextControl.DocumentMarkup.IntraTextAdornments;
 
 namespace ReSharperPlugin.CognitiveComplexity.Rider
 {

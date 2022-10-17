@@ -1,37 +1,29 @@
 using System.Collections.Generic;
-using JetBrains.Application.InlayHints;
 using JetBrains.Application.UI.Controls.BulbMenu.Items;
 using JetBrains.Application.UI.Controls.Utils;
 using JetBrains.Application.UI.PopupLayout;
-using JetBrains.TextControl.DocumentMarkup;
-using JetBrains.UI.Icons;
-using JetBrains.UI.RichText;
+using JetBrains.TextControl.DocumentMarkup.IntraTextAdornments;
 using JetBrains.Util;
 
 namespace ReSharperPlugin.CognitiveComplexity.Rider
 {
     public class CognitiveComplexityAdornmentDataModel : IIntraTextAdornmentDataModel
     {
-        private readonly int _value;
 
         public CognitiveComplexityAdornmentDataModel(int value)
         {
-            _value = value;
+            Data = new IntraTextAdornmentData()
+                .WithText($"+{value}")
+                .WithMode(InlayHintsMode.Always);
         }
 
         public void ExecuteNavigation(PopupWindowContextSource popupWindowContextSource)
         {
         }
 
-        public RichText Text => $"+{_value}";
-        public bool HasContextMenu { get; }
+        public IntraTextAdornmentData Data { get; }
         public IPresentableItem ContextMenuTitle { get; }
         public IEnumerable<BulbMenuItem> ContextMenuItems { get; }
-        public bool IsNavigable { get; }
         public TextRange? SelectionRange { get; }
-        public IconId IconId { get; }
-        public bool IsPreceding { get; }
-        public int Order { get; }
-        public InlayHintsMode InlayHintsMode => InlayHintsMode.Always;
     }
 }
