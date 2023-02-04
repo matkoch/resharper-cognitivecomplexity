@@ -5,6 +5,7 @@ build
 output
 .gradle
 .tmp
+.nuke
 
 # User-specific files
 *.suo
