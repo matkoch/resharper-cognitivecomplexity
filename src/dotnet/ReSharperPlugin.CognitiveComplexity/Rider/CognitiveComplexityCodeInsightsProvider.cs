@@ -40,9 +40,9 @@ namespace ReSharperPlugin.CognitiveComplexity.Rider
 
         public string ProviderId => nameof(CognitiveComplexityCodeInsightsProvider);
         public string DisplayName => "Cognitive Complexity";
-        public CodeLensAnchorKind DefaultAnchor => CodeLensAnchorKind.Top;
+        public CodeVisionAnchorKind DefaultAnchor => CodeVisionAnchorKind.Top;
 
-        public ICollection<CodeLensRelativeOrdering> RelativeOrderings => new CodeLensRelativeOrdering[]
-            {new CodeLensRelativeOrderingFirst()};
+        public ICollection<CodeVisionRelativeOrdering> RelativeOrderings => new CodeVisionRelativeOrdering[]
+            {new CodeVisionRelativeOrderingFirst()};
     }
 }
