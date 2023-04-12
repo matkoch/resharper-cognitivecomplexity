@@ -17,6 +17,6 @@ pluginManagement {
     }
 }
 
-rootProject.name = 'cognitivecomplexity'
+rootProject.name = 'ReSharperPlugin.CognitiveComplexity'
 
 include ':protocol'
