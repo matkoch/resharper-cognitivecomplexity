@@ -13,8 +13,8 @@ namespace ReSharperPlugin.CognitiveComplexity.Rider
 {
     // TODO: extract RegisterHighlighterGroup and RegisterHighlighter to separate class
     [RegisterHighlighterGroup(
-        CognitiveComplexityHintBase.HighlightAttributeGroupId,
-        CognitiveComplexityHintBase.HighlightAttributeIdBase,
+        HighlightAttributeGroupId,
+        HighlightAttributeIdBase,
         HighlighterGroupPriority.CODE_SETTINGS)]
     [RegisterHighlighter(
         HighlightAttributeId,
@@ -26,7 +26,7 @@ namespace ReSharperPlugin.CognitiveComplexity.Rider
         EffectType = EffectType.INTRA_TEXT_ADORNMENT,
         Layer = HighlighterLayer.ADDITIONAL_SYNTAX,
         TransmitUpdates = true)]
-    [DaemonIntraTextAdornmentProvider(typeof(CognitiveComplexityAdornmentProvider))]
+    [DaemonAdornmentProvider(typeof(CognitiveComplexityAdornmentProvider))]
     [DaemonTooltipProvider(typeof(InlayHintTooltipProvider))]
     [StaticSeverityHighlighting(Severity.INFO, typeof(HighlightingGroupIds.CodeInsights), AttributeId = HighlightAttributeId)]
     public class CognitiveComplexityInfoHint : CognitiveComplexityHintBase
@@ -49,7 +49,7 @@ namespace ReSharperPlugin.CognitiveComplexity.Rider
         EffectType = EffectType.INTRA_TEXT_ADORNMENT,
         Layer = HighlighterLayer.ADDITIONAL_SYNTAX,
         TransmitUpdates = true)]
-    [DaemonIntraTextAdornmentProvider(typeof(CognitiveComplexityAdornmentProvider))]
+    [DaemonAdornmentProvider(typeof(CognitiveComplexityAdornmentProvider))]
     [DaemonTooltipProvider(typeof(InlayHintTooltipProvider))]
     [StaticSeverityHighlighting(Severity.INFO, typeof(HighlightingGroupIds.CodeInsights), AttributeId = HighlightAttributeId)]
     public class CognitiveComplexityWarningHint : CognitiveComplexityHintBase
@@ -72,7 +72,7 @@ namespace ReSharperPlugin.CognitiveComplexity.Rider
         EffectType = EffectType.INTRA_TEXT_ADORNMENT,
         Layer = HighlighterLayer.ADDITIONAL_SYNTAX,
         TransmitUpdates = true)]
-    [DaemonIntraTextAdornmentProvider(typeof(CognitiveComplexityAdornmentProvider))]
+    [DaemonAdornmentProvider(typeof(CognitiveComplexityAdornmentProvider))]
     [DaemonTooltipProvider(typeof(InlayHintTooltipProvider))]
     [StaticSeverityHighlighting(Severity.INFO, typeof(HighlightingGroupIds.CodeInsights), AttributeId = HighlightAttributeId)]
     public class CognitiveComplexityErrorHint : CognitiveComplexityHintBase

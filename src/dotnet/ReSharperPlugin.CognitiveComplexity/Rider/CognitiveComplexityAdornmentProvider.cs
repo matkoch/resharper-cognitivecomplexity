@@ -1,18 +1,18 @@
 using JetBrains.ProjectModel;
 using JetBrains.TextControl.DocumentMarkup;
-using JetBrains.TextControl.DocumentMarkup.IntraTextAdornments;
+using JetBrains.TextControl.DocumentMarkup.Adornments;
 
 namespace ReSharperPlugin.CognitiveComplexity.Rider
 {
     [SolutionComponent]
-    public class CognitiveComplexityAdornmentProvider : IHighlighterIntraTextAdornmentProvider
+    public class CognitiveComplexityAdornmentProvider : IHighlighterAdornmentProvider
     {
         public bool IsValid(IHighlighter highlighter)
         {
             return highlighter.UserData is CognitiveComplexityHintBase;
         }
 
-        public IIntraTextAdornmentDataModel CreateDataModel(IHighlighter highlighter)
+        public IAdornmentDataModel CreateDataModel(IHighlighter highlighter)
         {
             return highlighter.UserData is CognitiveComplexityHintBase hint
                 ? new CognitiveComplexityAdornmentDataModel(hint.Value)
