@@ -43,6 +43,6 @@ namespace ReSharperPlugin.CognitiveComplexity.Rider
         public CodeVisionAnchorKind DefaultAnchor => CodeVisionAnchorKind.Top;
 
         public ICollection<CodeVisionRelativeOrdering> RelativeOrderings => new CodeVisionRelativeOrdering[]
-            {new CodeVisionRelativeOrderingFirst()};
+            { new CodeVisionRelativeOrderingFirst() };
     }
 }
