@@ -21,3 +21,6 @@ The **language specific threshold** indicates what you consider the maximum allo
 <img src="https://github.com/matkoch/resharper-cognitivecomplexity/blob/master/thresholds.png" width="500" />
 
 Depending on your individual preferences, you can disable for instance the _simple enough_ interval, by changing it's percentage threshold to the same as _mildly complex_. Setting _simple enough_ to a value of 0 would remove the simple gray diamond.
+
+
+# *Alles Jute zum Geburtstag Schatzi*
