@@ -6,11 +6,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReSharperPlugin.CognitiveCo
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "misc", "misc", "{4A9ABB95-3762-448B-B5BF-099E46DB22DE}"
 ProjectSection(SolutionItems) = preProject
-	src\rider\main\resources\META-INF\plugin.xml = src\rider\main\resources\META-INF\plugin.xml
 	src\dotnet\Plugin.props = src\dotnet\Plugin.props
 	README.md = README.md
 	CHANGELOG.md = CHANGELOG.md
+	src\rider\main\resources\META-INF\plugin.xml = src\rider\main\resources\META-INF\plugin.xml
 	gradle.properties = gradle.properties
+	src\dotnet\Directory.Build.props = src\dotnet\Directory.Build.props
+	build.gradle.kts = build.gradle.kts
 EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReSharperPlugin.CognitiveComplexity.Tests", "src\dotnet\ReSharperPlugin.CognitiveComplexity.Tests\ReSharperPlugin.CognitiveComplexity.Tests.csproj", "{01C3DEF5-50B2-47CB-9467-19BC6DDF9D3D}"
