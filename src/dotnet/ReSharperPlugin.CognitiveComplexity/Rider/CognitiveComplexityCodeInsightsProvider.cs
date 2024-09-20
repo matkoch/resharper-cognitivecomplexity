@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using JetBrains.Application.Parts;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Daemon.CodeInsights;
 using JetBrains.ReSharper.Psi;
@@ -7,7 +8,7 @@ using JetBrains.Rider.Model;
 
 namespace ReSharperPlugin.CognitiveComplexity.Rider
 {
-    [SolutionComponent]
+    [SolutionComponent(Instantiation.DemandAnyThreadSafe)]
     public class CognitiveComplexityCodeInsightsProvider : ICodeInsightsProvider
     {
         public static bool ShowIndicators;
