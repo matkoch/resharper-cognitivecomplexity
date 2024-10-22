@@ -1,24 +1,20 @@
 using System.Collections.Generic;
+using JetBrains.Application;
 using JetBrains.Application.Parts;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Daemon.CodeInsights;
+using JetBrains.ReSharper.Feature.Services.Daemon;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Resources.Shell;
 using JetBrains.Rider.Model;
 
 namespace ReSharperPlugin.CognitiveComplexity.Rider
 {
-    [SolutionComponent(Instantiation.DemandAnyThreadSafe)]
+    [ShellComponent(Instantiation.ContainerAsyncPrimaryThread)]
+    [HighlightingSource]
     public class CognitiveComplexityCodeInsightsProvider : ICodeInsightsProvider
     {
         public static bool ShowIndicators;
-
-        private readonly IPsiServices _services;
-
-        public CognitiveComplexityCodeInsightsProvider(IPsiServices services)
-        {
-            _services = services;
-        }
 
         public bool IsAvailableIn(ISolution solution)
         {
@@ -31,7 +27,8 @@ namespace ReSharperPlugin.CognitiveComplexity.Rider
             using (WriteLockCookie.Create())
             {
                 var sourceFile = highlightInfo.CodeInsightsHighlighting.Range.Document.GetPsiSourceFile(solution);
-                _services.MarkAsDirty(sourceFile.ToProjectFile());
+                var psiServices = solution.GetPsiServices();
+                psiServices.MarkAsDirty(sourceFile.ToProjectFile());
             }
         }
 
