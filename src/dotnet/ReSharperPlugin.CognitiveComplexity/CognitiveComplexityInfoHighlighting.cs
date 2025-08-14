@@ -2,7 +2,6 @@ using JetBrains.DocumentModel;
 using JetBrains.ReSharper.Feature.Services.Daemon;
 using JetBrains.ReSharper.Psi.CSharp.Tree;
 using JetBrains.TextControl.DocumentMarkup;
-using ReSharperPlugin.CognitiveComplexity;
 
 namespace ReSharperPlugin.CognitiveComplexity
 {

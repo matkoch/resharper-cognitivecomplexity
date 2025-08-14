@@ -1,14 +1,12 @@
 using System.Collections.Generic;
+using JetBrains.Diagnostics;
 using JetBrains.DocumentModel;
-using JetBrains.ReSharper.Feature.Services.Daemon;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.CSharp.Tree;
 using JetBrains.ReSharper.Psi.CSharp.Util;
 using JetBrains.ReSharper.Psi.Tree;
 #if RIDER
-using System.Numerics;
 using ReSharperPlugin.CognitiveComplexity.Rider;
-
 #endif
 
 namespace ReSharperPlugin.CognitiveComplexity
@@ -25,15 +23,13 @@ namespace ReSharperPlugin.CognitiveComplexity
 
 #if RIDER
             if (CognitiveComplexityCodeInsightsProvider.ShowIndicators)
-            {
-                Complexities = new List<(ITreeNode Node, DocumentOffset offset, int complexity)>();
-            }
+                Complexities = [];
 #endif
         }
 
         public int ComplexityScore { get; private set; }
 
-        public List<(ITreeNode Node, DocumentOffset offset, int complexity)> Complexities { get; private set; }
+        public List<(ITreeNode Node, DocumentOffset offset, int complexity)> Complexities { get; }
 
         public bool ProcessingIsFinished => false;
 
@@ -93,7 +89,7 @@ namespace ReSharperPlugin.CognitiveComplexity
                     IncreaseComplexity(breakStatement.Semicolon);
                     return;
                 case ICSharpExpression expression
-                    when expression.HasRecursion(_element):
+                    when expression.HasRecursion(_element.DeclaredElement.NotNull()):
                     IncreaseComplexity();
                     return;
                 case IConditionalOrExpression conditionalOrExpression
@@ -123,18 +119,13 @@ namespace ReSharperPlugin.CognitiveComplexity
         private bool HasParent<T>(ITreeNode expression)
             where T : IBinaryExpression
         {
-            switch (expression.Parent)
+            return expression.Parent switch
             {
-                case IUnaryOperatorExpression unaryOperatorExpression
-                    when unaryOperatorExpression.UnaryOperatorType == UnaryOperatorType.EXCL:
-                    return HasParent<T>(unaryOperatorExpression);
-                case IParenthesizedExpression parenthesizedExpression:
-                    return HasParent<T>(parenthesizedExpression);
-                case T _:
-                    return true;
-                default:
-                    return false;
-            }
+                IUnaryOperatorExpression { UnaryOperatorType: UnaryOperatorType.EXCL } unaryOperatorExpression => HasParent<T>(unaryOperatorExpression),
+                IParenthesizedExpression parenthesizedExpression => HasParent<T>(parenthesizedExpression),
+                T _ => true,
+                _ => false
+            };
         }
 
         private IBinaryExpression MostLeft<T>(T binaryExpression)

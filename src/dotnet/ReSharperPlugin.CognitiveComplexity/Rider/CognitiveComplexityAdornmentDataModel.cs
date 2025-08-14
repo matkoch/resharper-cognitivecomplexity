@@ -7,21 +7,16 @@ using JetBrains.Util;
 
 namespace ReSharperPlugin.CognitiveComplexity.Rider
 {
-    public class CognitiveComplexityAdornmentDataModel : IAdornmentDataModel
+    public class CognitiveComplexityAdornmentDataModel(int value) : IAdornmentDataModel
     {
-
-        public CognitiveComplexityAdornmentDataModel(int value)
-        {
-            Data = new AdornmentData()
-                .WithText($"+{value}")
-                .WithMode(PushToHintMode.Always);
-        }
-
         public void ExecuteNavigation(PopupWindowContextSource popupWindowContextSource)
         {
         }
 
-        public AdornmentData Data { get; }
+        public AdornmentData Data { get; } = new AdornmentData()
+            .WithText($"+{value}")
+            .WithMode(PushToHintMode.Always);
+
         public IPresentableItem ContextMenuTitle { get; }
         public IEnumerable<BulbMenuItem> ContextMenuItems { get; }
         public TextRange? SelectionRange { get; }

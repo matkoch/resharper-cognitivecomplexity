@@ -1,12 +1,10 @@
-using System;
-using System.Linq;
-using JetBrains.Application.Settings;
 using JetBrains.ReSharper.Feature.Services.Daemon;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.CSharp.Tree;
-using JetBrains.ReSharper.Psi.Tree;
 #if RIDER
+using System;
 using JetBrains.ReSharper.Daemon.CodeInsights;
+using JetBrains.ReSharper.Psi.Tree;
 using JetBrains.Rider.Backend.Platform.Icons;
 using JetBrains.UI.Icons;
 using ReSharperPlugin.CognitiveComplexity.Rider;

@@ -12,7 +12,7 @@ namespace ReSharperPlugin.CognitiveComplexity.Options
         {
             Name = languagePresentableName;
 
-            Threshold = new Property<int>(lifetime, index);
+            Threshold = new Property<int>(index);
             Threshold.Change.Advise(lifetime, () => OnPropertyChanged(nameof(Threshold)));
             settings.SetBinding(lifetime, settingsIndexedEntry, index, Threshold, defaultValue);
         }

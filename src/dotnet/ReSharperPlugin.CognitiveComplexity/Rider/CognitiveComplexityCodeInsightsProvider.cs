@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using JetBrains.Application;
 using JetBrains.Application.Parts;
+using JetBrains.Diagnostics;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Daemon.CodeInsights;
 using JetBrains.ReSharper.Feature.Services.Daemon;
@@ -28,7 +29,7 @@ namespace ReSharperPlugin.CognitiveComplexity.Rider
             {
                 var sourceFile = highlightInfo.CodeInsightsHighlighting.Range.Document.GetPsiSourceFile(solution);
                 var psiServices = solution.GetPsiServices();
-                psiServices.MarkAsDirty(sourceFile.ToProjectFile());
+                psiServices.MarkAsDirty(sourceFile.ToProjectFile().NotNull());
             }
         }
 
