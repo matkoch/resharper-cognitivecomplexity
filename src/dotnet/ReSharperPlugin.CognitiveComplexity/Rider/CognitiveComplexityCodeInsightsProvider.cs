@@ -21,7 +21,7 @@ namespace ReSharperPlugin.CognitiveComplexity.Rider
             return true;
         }
 
-        public void OnClick(CodeInsightHighlightInfo highlightInfo, ISolution solution)
+        public void OnClick(CodeInsightHighlightInfo highlightInfo, ISolution solution, CodeInsightsClickInfo clickInfo)
         {
             ShowIndicators = !ShowIndicators;
             using (WriteLockCookie.Create())
