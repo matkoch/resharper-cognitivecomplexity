@@ -1,0 +1,68 @@
+name: Build, Test, Deploy
+
+on: [push, pull_request]
+
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: jlumbroso/free-disk-space@main
+        with:
+          tool-cache: false
+          large-packages: false
+          dotnet: false
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - uses: actions/cache@v4
+        with:
+          path: |
+            build/gradle-jvm
+            ~/.nuget/packages
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-Build-${{ hashFiles('gradlew.bat', 'src/dotnet/*/*.csproj', 'src/dotnet/*.props', 'gradle-wrapper.properties') }}
+      - run: ./gradlew :buildPlugin --no-daemon
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ${{ github.event.repository.name }}.CI.${{ github.ref_name }}.${{ github.run_number }}
+          path: output
+
+  Test:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - uses: actions/cache@v4
+        with:
+          path: |
+            build/gradle-jvm
+            packages
+            ~/.nuget/packages
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-Test-${{ hashFiles('gradlew.bat', 'src/dotnet/*/*.csproj', 'src/dotnet/*.props', 'gradle-wrapper.properties') }}
+      - run: ./gradlew.bat :testDotNet --no-daemon
+
+  Deploy:
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: jlumbroso/free-disk-space@main
+        with:
+          tool-cache: false
+          large-packages: false
+          dotnet: false
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - run: ./gradlew :publishPlugin -PBuildConfiguration="Release" -PPluginVersion="${{ github.ref_name }}" -PPublishToken="${{ env.PUBLISH_TOKEN }}"
+        env:
+          PUBLISH_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ${{ github.event.repository.name }}.${{ github.ref_name }}
+          path: output
